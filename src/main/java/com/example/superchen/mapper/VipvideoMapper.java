@@ -1,0 +1,9 @@
+package com.example.superchen.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.superchen.domain.dom.Vipvideo;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface VipvideoMapper extends BaseMapper<Vipvideo> {
+}

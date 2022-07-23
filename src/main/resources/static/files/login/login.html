@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>用户登录</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/three.css">
+    <style>
+        body{
+            font-size: 16px;
+            background: url("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2019-11-05%2F5dc11c6205de6.jpg&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660556989&t=a47095795258e73b37db578eeff58e35") no-repeat;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+
+        }
+        #zc{
+            color: #fff;
+        }
+
+
+
+
+        .container {
+            width: 310px;
+            margin: 100px auto;
+        }
+        
+        input {
+            display: block;
+            width: 290px;
+            line-height: 40px;
+            margin: 10px 0;
+            padding: 0 10px;
+            outline: none;
+            border: 1px solid #c8cccf;
+            border-radius: 4px;
+            color: #6a6f77;
+        }
+        
+        #msg {
+            width: 100%;
+            line-height: 40px;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        a:link,
+        a:visited,
+        a:hover,
+        a:active {
+            margin-left: 100px;
+            color: #0366D6;
+        }
+    </style>
+</head>
+
+<body>
+<div class="login">
+    <div class="container">
+        用 户 名 <input type="text" id="username" name="username"><br>
+
+        密  码 ：<input type="password" id="password" name="password"><br>
+        <input type="button" id="sb" name="sb" onclick="logins()" value="登录" class="btn btn-primary btn-lg" >
+        <input type="button"  value="注册" class="btn btn-primary btn-lg" id="zc" onclick="zc()">
+        <div id="captcha"></div>
+        <div id="msg"></div>
+    </div>
+    </div>
+
+    <script src="../../js/jquery-3.3.1.js"></script>
+    <script src="../../layer/layer.js"></script>
+    <script>
+        //判断是否已经登录过了
+        $.ajax({
+            url:"/user/getState",
+            type:"get",
+            dataType:"json",
+            contentType: "application/json",
+            success: function (data) {
+                //已经登录跳转后台
+                if (data.code === 200){
+                    window.location.replace("/user/gomain");
+                }
+                console.log("验证登录状态：未登录！")
+            }
+        });
+
+
+        //隐藏验证
+        document.getElementById("captcha").style.display = "none";
+        document.getElementById("msg").style.display = "none"
+
+        if (!window.vTree) {
+            document.write('<script src="./dist/imgSlider.min.js"><\/script>')
+        }
+    </script>
+    <script>
+        imgSlider.init({
+            el: document.getElementById('captcha'),
+            onSuccess: function() {
+
+                var username = $("#username").val();
+                var password = $("#password").val();
+                //验证成功，发请求
+                $.ajax({
+                    url:"/user/login",
+                    type:"post",
+                    dataType:"json",
+                    contentType: "application/json",
+                    data:JSON.stringify({"username":username,"password":password}),
+                    beforeSend: function (xhr) {
+                        layer.msg("登录中",{icon:16})
+                    },
+                    success: function (data) {
+                        layer.msg(data.msg)
+                        //登录成功跳转后台
+                        if (data.code === 200){
+                            layer.msg(data.msg)
+                            window.location.replace("/user/gomain");
+                        }
+                        //登录失败重新验证
+                        cleanMsg()
+                    },
+
+                    error: function (e)//服务器响应失败处理函数
+                    {
+                        //登录失败重新验证
+                        alert("发生错误,错误码:"+e.status);
+                        document.getElementById('msg').innerHTML = ''
+                        console.log(e.message)
+                    }
+
+                })
+            },
+            onFail: cleanMsg,
+            onRefresh: cleanMsg
+        })
+
+        function cleanMsg() {
+            document.getElementById('msg').innerHTML = ''
+        }
+        //点击登录，验证输入
+        function logins(){
+
+            var username = $("#username").val();
+            var password = $("#password").val();
+
+
+            if (username === '') {
+                layer.msg("请填写用户名")
+                return false;
+            }else if(password === '') {
+                layer.msg("请填写密码")
+                return false;
+            }
+            //验证输入成功，显示滑动验证
+            document.getElementById("captcha").style.display = "";
+            document.getElementById("msg").style.display = ""
+        }
+
+        //页面加载完成
+        //去掉动画
+        window.onload = function(){
+            document.getElementById("loading-v3").style.display = "none"
+        }
+
+        function zc(){
+            window.location.href  = "/files/register.html";
+        }
+
+
+    </script>
+
+<script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+<script>
+    L2Dwidget.init({
+        //初音
+        // "model": { "jsonPath":"https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json", "scale": 1, "hHeadPos":0.5, "vHeadPos":0.618 },
+        //可爱女
+        "model": { "jsonPath":"https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json", "scale": 1, "hHeadPos":0.5, "vHeadPos":0.618 },
+        //可爱男
+        // "model": {"jsonPath":"https://unpkg.com/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json", "scale": 1, "hHeadPos":0.5, "vHeadPos":0.618 },
+        // 小帅哥： https://unpkg.com/live2d-widget-model-chitose@1.0.5/assets/chitose.model.json
+        // 萌娘：https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json
+        // 白猫：https://unpkg.com/live2d-widget-model-tororo@1.0.5/assets/tororo.model.json
+        // 黑猫： https://unpkg.com/live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json
+        // 小可爱（女）：https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json
+        // 小可爱（男）：https://unpkg.com/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json
+        // 初音：https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json
+        // 圣职者妹妹：https://unpkg.com/live2d-widget-model-z16@1.0.5/assets/z16.model.json
+        // 茶杯犬：https://cdn.jsdelivr.net/npm/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json
+        // 绿毛妹妹：https://unpkg.com/live2d-widget-model-tsumiki@1.0.5/assets/tsumiki.model.json
+        // 金龟子妹妹：https://unpkg.com/live2d-widget-model-unitychan@1.0.5/assets/unitychan.model.json
+        // https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json
+        // https://unpkg.com/live2d-widget-model-ni-j@1.0.5/assets/ni-j.model.json
+        // 小阿狸： https://unpkg.com/live2d-widget-model-nico@1.0.5/assets/nico.model.json
+        // https://unpkg.com/live2d-widget-model-nietzche@1.0.5/assets/nietzche.model.json
+        // https://unpkg.com/live2d-widget-model-nipsilon@1.0.5/assets/nipsilon.model.json
+        // 女学生： https://unpkg.com/live2d-widget-model-hibiki@1.0.5/assets/hibiki.model.json
+        "display": { "position": "right", "width": 100, "height":200, "hOffset": 0, "vOffset": 0 },
+        "mobile": { "show": true, "scale": 0.1 },
+        "react": { "opacityDefault": 0.6, "opacityOnHover": 0.2 }
+    });
+</script>
+
+</body>
+
+</html>

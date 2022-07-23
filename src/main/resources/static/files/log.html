@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SuperChen API 更新日志 </title>
+    <!--引入动画css-->
+    <link rel="stylesheet" href="../css/three.css">
+
+    <style>
+        body{
+            list-style: none;
+            background: url(https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg1.mydrivers.com%2Fimg%2F20190301%2F1cf1a9ce384b469ba5aea6018476563a.jpg&refer=http%3A%2F%2Fimg1.mydrivers.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660824035&t=8f6a657b31bf517395d4293895dd0b9c)
+        }
+
+        ul li{
+            line-height: 50px;
+            text-align: center;
+            ist-style: none;
+            color: red;
+            font-weight: bold;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<div id="loading-v3">
+    <div id="loading-v3-bg"></div>
+    <div id="loading-v3-box">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</div>
+
+<h1 align="center" style="color: pink">SuperChen API 更新日志</h1>
+
+<ul align="center" style="list-style: none">
+    <li>2022/7/16 增加了登录和注册功能</li>
+    <li>2022/7/16 增加了网站提取文本功能API</li>
+    <li>2022/7/17 对注册功能增加了 输入用户名后判断是否已被注册</li>
+    <li>2022/7/18 对登录注册的增加了加载动画</li>
+    <li>2022/7/18 对各大API 接口 进行了调用频率的限制</li>
+    <li>2022/7/19 登录后功能 增加了随机获取MP4短视频的API </li>
+    <li>2022/7/19 增加了随机获取图片的API </li>
+    <li>2022/7/20 增加了token 来认证 开放的API  </li>
+    <li>2022/7/20 开放了视频解析功能  </li>
+    <li>2022/7/21 开放了获取音乐功能  </li>
+    <li>2022/7/22 增加了登录滑动验证码功能  </li>
+    <li>2022/7/22 增加了进入用户登录页面，判断是否登录，若已登录则自动跳转主页</li>
+    <li>2022/7/23 增加了临时token 可用临时token 调用API </li>
+</ul>
+
+
+
+
+<script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+<script>
+    L2Dwidget.init({
+        //初音
+        // "model": { "jsonPath":"https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json", "scale": 1, "hHeadPos":0.5, "vHeadPos":0.618 },
+        //可爱女
+        "model": { "jsonPath":"https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json", "scale": 1, "hHeadPos":0.5, "vHeadPos":0.618 },
+        //可爱男
+        // "model": {"jsonPath":"https://unpkg.com/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json", "scale": 1, "hHeadPos":0.5, "vHeadPos":0.618 },
+        // 小帅哥： https://unpkg.com/live2d-widget-model-chitose@1.0.5/assets/chitose.model.json
+        // 萌娘：https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json
+        // 白猫：https://unpkg.com/live2d-widget-model-tororo@1.0.5/assets/tororo.model.json
+        // 黑猫： https://unpkg.com/live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json
+        // 小可爱（女）：https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json
+        // 小可爱（男）：https://unpkg.com/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json
+        // 初音：https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json
+        // 圣职者妹妹：https://unpkg.com/live2d-widget-model-z16@1.0.5/assets/z16.model.json
+        // 茶杯犬：https://cdn.jsdelivr.net/npm/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json
+        // 绿毛妹妹：https://unpkg.com/live2d-widget-model-tsumiki@1.0.5/assets/tsumiki.model.json
+        // 金龟子妹妹：https://unpkg.com/live2d-widget-model-unitychan@1.0.5/assets/unitychan.model.json
+        // https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json
+        // https://unpkg.com/live2d-widget-model-ni-j@1.0.5/assets/ni-j.model.json
+        // 小阿狸： https://unpkg.com/live2d-widget-model-nico@1.0.5/assets/nico.model.json
+        // https://unpkg.com/live2d-widget-model-nietzche@1.0.5/assets/nietzche.model.json
+        // https://unpkg.com/live2d-widget-model-nipsilon@1.0.5/assets/nipsilon.model.json
+        // 女学生： https://unpkg.com/live2d-widget-model-hibiki@1.0.5/assets/hibiki.model.json
+        "display": { "position": "right", "width": 200, "height":300, "hOffset": 0, "vOffset": 10 },
+        "mobile": { "show": true, "scale": 0.3 },
+        "react": { "opacityDefault": 0.5, "opacityOnHover": 0.2 }
+    });
+    //延迟一秒
+    var myVar=setInterval(function(){
+        document.getElementById("loading-v3").style.display = "none"
+        console.log("动画执行完毕。。。")
+    },1000)
+</script>
+<script src="js/config.js"></script>
+
+</body>
+</html>

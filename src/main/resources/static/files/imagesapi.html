@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=referrer content=no-referrer>
+    <title>随机图片API </title>
+</head>
+<body>
+
+<div id="dirImg"></div>
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script>
+    window.onload = function getMp4() {
+        $.ajax({
+            url: "/images/randomImg",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            // data: JSON.stringify({"username": username, "password": password, "email": email}),
+            beforeSend: function (xhr) {
+                layer.load(2, {time: 100*1000}); //又换了种风格，并且设定最长等待100秒
+            },
+            success: function (data) {
+                //请求频繁
+                if (data.code === 403){
+                    //关闭加载层
+                    layer.closeAll('loading');
+                    layer.msg(data.msg)
+                }
+                // $("#dirImg").attr("src",data.msg);
+                //关闭加载层
+                document.getElementById("dirImg").innerHTML = '<img  src='+data.msg+'></img>'
+                layer.closeAll('loading');
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

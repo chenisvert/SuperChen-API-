@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
+    <meta name="referrer" content="no-referrer">
+
+    <title>随机视频播放</title>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+
+<div id="dirmp4"></div>
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script>
+
+    window.onload = function getMp4() {
+
+        $.ajax({
+            url: "/api/myMp4",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            // data: JSON.stringify({"username": username, "password": password, "email": email}),
+            beforeSend: function (xhr) {
+                layer.msg("获取中。。。", {icon: 16})
+            },
+            success: function (data) {
+                //请求频繁
+                if (data.code === 403) {
+                    layer.msg(data.msg)
+                }
+
+                document.getElementById("dirmp4").innerHTML = '<video autoplay controls src=' + data.msg + '></video>'
+
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>

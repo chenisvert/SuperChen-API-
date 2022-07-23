@@ -1,0 +1,385 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>用户主页</title>
+<meta name="keywords" content="用户主页,技术导航,福利导航,资源导航,娱乐导航,ML团队,网址导航">
+<meta name="description" content=",这是一个导航发布页">
+<link rel="stylesheet" id="font-css" href="http://at.alicdn.com/t/font_2701600_loackf4ohps.css?meirifuli.net" type="text/css" media="all">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+<style>
+a, body, div,footer, h1, h2, h3, h4, h5, h6, header, html, i, img, menu, nav,  p, ul, li {margin: 0;padding: 0;border: 0;font-size: 100%;font: inherit;vertical-align: baseline;list-style: none;}
+ *{ -webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-tap-highlight-color: transparent; /* For some Androids */ }
+*, :after, :before {box-sizing: border-box;}
+a{text-decoration: none;color: #ffffff;-webkit-touch-callout: none;-webkit-user-select: none;-webkit-tap-highlight-color: transparent; outline: none;transition: color .1s ease;}
+html{overflow-x:hidden;font-size: 62.5%;}
+html,body{position: relative;height: 100%;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
+body{font-family: "Microsoft Yahei", sans-serif;font-size: 15px;background-color: #f3f5f7;color: #333;background: url(/userimg/2021090814460596.png);background-attachment: fixed;background-repeat: no-repeat;background-size: cover;}
+header{width: 100%;height: 60px;background-color: rgba(255,255,255,1);}
+main{width: 100%;padding: 10px;}
+.max{max-width: 750px;margin: 0 auto;}
+.flex{display: flex;justify-content: space-between;align-items: center;}
+.flex-center{justify-content: center!important;}
+.shadow{background-color: #fff;}
+.header{height: 60px;}
+.header h1{font-size: 18px;}
+.notice{width: 100%!important;margin: 0 auto 10px!important;padding: 10px;border-radius: 5px!important;background-color: rgba(254,168,2,.15)!important;}
+.notice i {font-size: 15px;color: #FEA802;}
+.notice marquee {width: calc(100% - 25px);}
+.notice h2 {font-size: 15px;color: #FEA802;}
+.app{width: 100%;padding: 15px 10px 10px;margin: 0 auto 10px;background-color: #fff;border-radius: 5px;}
+.app-meta{padding: 10px 0 25px;}
+.app-meta h1{font-size: 16px;color: #000;}
+.app-meta h1 i{font-size: 16px;color: #06f;margin: 0 5px 0 0;}
+.app-meta h2{font-size: 14px;color: #999;}
+.app ul{flex-wrap: wrap;justify-content: flex-start!important;}
+.app-item{width: calc(50% - 5px);margin: 0 10px 15px 0;padding: 10px;background-color: #f3f5f7;border-radius: 5px;overflow: hidden;}
+.app-item img {width: 26px;height: 26px;border-radius: 100%;overflow: hidden;}
+.app-item h1 {width: calc(100% - 56px);font-size: 14px;font-weight: bold;color: #666;}
+.app-item i {font-size: 20px;color: #ccc;}
+.app-item:nth-child(2n){margin: 0 0 15px 0;}
+</style>
+<header>
+    <div class="header max flex flex-center">
+        <h1 id="usernamedir">用户主页</h1>
+        </div>
+    
+<main class="max">
+    <!--公告-->
+    <div class="notice flex">
+        <i class="fan son-gonggao"></i>
+        <marquee><h2>近期没有公告</h2></marquee>
+        </div>
+    <!--大板块-->
+    <main class="app">
+        <div class="app-meta flex">
+            <h1 ><i class="fan son-xing"></i>用户主页</h1>
+            <h2>提供开放的API</h2>
+            </div>
+        <ul class="flex">
+            <li class="app-item">
+                <a class="flex" target="_blank" href="http://47.106.67.99" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">站长博客</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="https://idc.cyyun.cc/" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">服务器</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex"  href="#" rel="bookmark" onclick="geToken()">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">获取token</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" data-toggle="modal" data-target="#img" href="#" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">图片投稿</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <!--<li class="app-item">
+                <a class="flex" target="_blank" href="#" rel="bookmark">
+                    <img class="app-item-img" src="img/site.png">
+                    <h1 class="app-item-title">待添加</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="#" rel="bookmark">
+                    <img class="app-item-img" src="img/site.png">
+                    <h1 class="app-item-title">待添加</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="" rel="bookmark">
+                    <img class="app-item-img" src="img/site.png">
+                    <h1 class="app-item-title">待添加</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="" rel="bookmark">
+                    <img class="app-item-img" src="img/site.png">
+                    <h1 class="app-item-title">待添加</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="" rel="bookmark">
+                    <img class="app-item-img" src="img/site.png">
+                    <h1 class="app-item-title">待添加</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>-->
+            </ul>
+        </main>  
+    <!--大板块-->
+    <main class="app">
+        <div class="app-meta flex">
+            <h1><i class="fan son-xing"></i>本站 API </h1>
+            <h2>五花八门，总有你需要的！</h2>
+            </div>
+        <ul class="flex">
+            <li class="app-item">
+                <a class="flex" target="_blank" href="https://wallhaven.cc/" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">高清壁纸</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+
+                <a class="flex"  href="#"   data-toggle="modal" data-target="#myModal" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title" >视频投稿</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="/files/smallmp4.html" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">随机短视频</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="/files/getimages.html" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">随机图片</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="/files/getmymp4.html" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">随机视频2</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="/files/imagesapi.html" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">随机图片2</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="/files/videovip.html" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">視頻解析</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="/files/musicapi.html" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">获取音乐</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            <li class="app-item">
+                <a class="flex" target="_blank" href="" rel="bookmark">
+                    <img class="app-item-img" src="/userimg/site.png">
+                    <h1 class="app-item-title">待添加</h1>
+                    <i class="fan son-you"></i>
+                    </a>
+                </li>
+            </ul>
+        </main> 
+    </main>
+
+    
+
+</header>
+
+
+
+
+
+<!-- 按钮触发模态框 -->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">我要投稿</h4>
+            </div>
+            <div class="modal-body">视频链接</div>
+            <label for="context">链接</label>
+            <input type="url" class="form-control" name="context" id="context" placeholder="请输入网址">
+            <label for="bz">备注</label>
+            <input type="text" class="form-control" name="bz" id="bz" placeholder="请输入您的备注">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="report()">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<!--图片投稿-->
+<div class="modal fade" id="img" tabindex="-1" role="dialog" aria-labelledby="img" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="tg">我要投稿</h4>
+            </div>
+            <div class="modal-body">图片链接</div>
+            <label for="context">链接</label>
+            <input type="url" class="form-control" name="context" id="images" placeholder="请输入网址">
+            <label for="bz">类型</label>
+            <form id="toolForm">
+                <input type="radio" value="美女" name="img">美女<input type="radio" value="动漫" name="img">动漫
+                <input type="radio" value="风景" name="img">风景<input type="radio" value="人物" name="img">人物
+                <input type="radio" value="游戏" name="img">游戏
+            </form>
+            <br>
+            <label for="bz">备注</label>
+            <input type="text" class="form-control" name="bz" id="bzs" placeholder="请输入您的备注">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="sbImg()">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+
+
+<script src="/js/jquery-3.3.1.js"></script>
+<script src="/layer/layer.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+    window.onload = function () {
+
+        $.ajax({
+            url: "/user/getUser",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            // data: JSON.stringify({"username": username, "password": password}),
+            success: function (data) {
+                document.getElementById("usernamedir").innerHTML = "欢迎！用户"+data.username+"</br>" +"您的上次登录时间"+data.createTime
+            },
+
+            error: function (e)//服务器响应失败处理函数
+            {
+                alert("发生错误,错误码:" + e.status);
+                console.log(e.message)
+            }
+
+        })
+    }
+
+function report() {
+        let bz = document.getElementById("bz").value;
+        let url = document.getElementById("context").value;
+
+
+    if (url === '') {
+        layer.msg("请填写链接")
+        return false;
+    }else if(bz === '') {
+        layer.msg("请填写备注")
+        return false;
+    }
+
+
+    $.ajax({
+        url:"/user/report?url="+url+"&remark="+bz,
+        type:"get",
+        dataType:"json",
+        // date:JSON.stringify({"url": url, "remark": bz}),
+        success: function (data) {
+            layer.msg(data.msg)
+            //成功后清除
+            $("#email").val("");
+            $("#context").val("");
+            $("#bz").val("");
+        },
+        error: function (e)//服务器响应失败处理函数
+        {
+            alert("发生错误,错误码:" + e.status);
+            console.log(e.message)
+        }
+
+    })
+}
+
+function sbImg() {
+    let url = document.getElementById("images").value;
+    let bz = document.getElementById("bzs").value;
+    //获取单选框
+    var dx = $('input:radio:checked').val();
+
+
+    if (url === '') {
+        layer.msg("请填写链接")
+        return false;
+    } else if (dx === undefined) {
+        layer.msg("请选择类型")
+        return false;
+    } else if (bz === '') {
+        layer.msg("请填写备注！")
+        return false;
+    }
+
+    $.ajax({
+        url: "/images/save",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({"url": url, "type": dx, "bz": bz}),
+        success: function (data) {
+            layer.msg(data.msg)
+            //成功后清除
+            $("#images").val("");
+            $("#bzs").val("");
+        },
+
+        error: function (e)//服务器响应失败处理函数
+        {
+            alert("发生错误,错误码:" + e.status);
+            console.log(e.message)
+        }
+
+    })
+}
+function geToken() {
+    $.ajax({
+        url: "/user/geToken",
+        type: "post",
+        dataType: "json",
+        // date:JSON.stringify({"url": url, "remark": bz}),
+        success: function (data) {
+            alert(data.msg)
+        },
+        error: function (e)//服务器响应失败处理函数
+        {
+            alert("发生错误,错误码:" + e.status);
+            console.log(e.message)
+        }
+    })
+
+
+
+}
+
+</script>
+</body>
+</html>

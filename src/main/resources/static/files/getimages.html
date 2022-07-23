@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=referrer content=no-referrer>
+    <title>随机图片</title>
+
+    <style>
+        img{
+            border: 2px pink;
+        }
+
+    </style>
+</head>
+<body>
+<!--存放图片-->
+<div id="dirImg"></div>
+
+<input type="button" id="nextImage" name="nextImage" value="换一张" onclick="getMp4()">
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script>
+    window.onload = function getMp4() {
+        $.ajax({
+            url: "/api/image",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            // data: JSON.stringify({"username": username, "password": password, "email": email}),
+            beforeSend: function (xhr) {
+                layer.load(2, {time: 100*1000}); //又换了种风格，并且设定最长等待100秒
+                var index = layer.load(1, {
+                    shade: [0.1,'#fff'] //0.1透明度的白色背景
+                });
+            },
+            success: function (data) {
+                //请求频繁
+                if (data.code === 403){
+                    //关闭加载层
+                    layer.closeAll('loading');
+                    layer.msg(data.msg)
+                }
+                // $("#dirImg").attr("src",data.msg);
+                //关闭加载层
+                layer.closeAll('loading');
+                document.getElementById("dirImg").innerHTML = '<img  src='+data.msg+'></img>'
+
+            }
+        })
+    }
+
+    function getMp4() {
+        $.ajax({
+            url: "/api/image",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            // data: JSON.stringify({"username": username, "password": password, "email": email}),
+            beforeSend: function (xhr) {
+                layer.load(2, {time: 100 * 1000}); //又换了种风格，并且设定最长等待100秒
+                var index = layer.load(1, {
+                    shade: [0.1, '#fff'] //0.1透明度的白色背景
+                });
+            },
+            success: function (data) {
+                //请求频繁
+                if (data.code === 403) {
+                    //关闭加载层
+                    layer.closeAll('loading');
+                    layer.msg(data.msg)
+                }
+                // $("#dirImg").attr("src",data.msg);
+                //关闭加载层
+                layer.closeAll('loading');
+                document.getElementById("dirImg").innerHTML = '<img  src=' + data.msg + '></img>'
+
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

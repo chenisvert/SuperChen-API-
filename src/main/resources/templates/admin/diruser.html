@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1" align="center" cellpadding="0">
+    <tr bgcolor="#ff1493">
+        <td>用户名</td>
+        <td>邮箱</td>
+        <td>权限</td>
+        <td>活跃日期</td>
+        <td>token</td>
+    </tr>
+    <tr th:each="user:${userList}">
+        <td th:text="${user.username}" id="username"></td>
+        <td th:text="${user.email} " id="email"></td>
+        <td th:text="${user.permission} " id="permission"></td>
+        <td th:text="${user.createTime} " id="time"></td>
+        <td th:text="${user.token} "  id="token"></td>
+<!--        <input type="button" onclick="">-->
+    </tr>
+
+
+
+</table>
+
+<script>
+
+</script>
+</body>
+</html>

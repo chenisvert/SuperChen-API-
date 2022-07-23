@@ -1,0 +1,77 @@
+server:
+  port: 8080
+spring:
+  application:
+    #应用的名称，可选
+    name: superchen_network
+
+  datasource:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/network?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: chen
+
+
+  # 邮箱配置
+  mail:
+    host: smtp.qq.com  # 发送邮件的服务器地址
+    username: keaifafafa@qq.com # 登录qq邮箱的账号
+    password: pibszxzqtwyzbfij  # 开启 IMAP/SMTP服务 获得的授权码,而不是qq邮箱的登录密码
+    default-encoding: UTF-8
+    port: 587
+  # redis配置
+  redis:
+    host: localhost # 本地IP 或是 虚拟机IP
+    port: 6379
+    cache:
+      redis:
+        time-to-live: 1800000  # 设置缓存数据的过期时间，30分钟
+    #    password: root
+    database: 0  # 默认使用 0号db
+
+
+    # 配置ThymeLeaf模板缓存
+    thymeleaf:
+      cache: false
+    http:
+      encoding:
+          force: true
+          charset: UTF-8
+          enabled: true
+  # 配置文件上传相关
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  thymeleaf:
+    mode: HTML
+    cache: false
+    encoding: UTF-8
+
+
+
+mybatis-plus:
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  global-config:
+#    db-config:
+#      id-type: ASSIGN_ID
+#    # 设置逻辑删除（也可不写，如果逻辑和如下一样，可以不写的）
+#    logic-delete-value: 1
+#    logic-not-delete-value: 0
+
+
+
+# 图片存储路径
+
+qingguo:
+  path: D:\Download\
+
+#接入百度地图api
+baidu:
+  ak: LYtAh4tS4jA0GxG0qwwZK4ylQWLRch27
+
+

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>安全浏览</title>
+
+
+    <style>
+        input{
+            text-align: center;
+            font-size: 30px;
+        }
+
+    </style>
+</head>
+<body>
+<h2>输入网址请忽略http或https</h2>
+网址：<input  id="url" type="url"><br>
+<input type="button" onclick="sendurl()" value="http请求">
+<br>
+<input type="button" onclick="sendurls()" value="https请求">
+<br>
+<hr>
+<h3 style="color: #2aabd2;margin-bottom: 10px">提取文字：</h3>
+<div id="dir"></div>
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script>
+
+    function sendurl(){
+        var b = confirm("您检测的网址可能不安全，是否要继续检测")
+        if (b) {
+            let url = document.getElementById("url").value
+            $.ajax({
+                url: "/sendUrl/" + url,
+                type: "get",
+                timeout: 30000,
+                dataType: "json",
+                contentType: "application/json",
+                beforeSend: function (xhr) {
+                    layer.load(2, {time: 100*1000}); //又换了种风格，并且设定最长等待100秒
+                    var index = layer.load(1, {
+                        shade: [0.1,'#fff'] //0.1透明度的白色背景
+                    });
+                },
+                // data:JSON.stringify({"url":url}),
+                success: function (data) {
+                    //关闭加载层
+                    layer.closeAll('loading');
+                    document.getElementById("dir").innerHTML = data.msg;
+
+                },
+
+                error: function (e)//服务器响应失败处理函数
+                {
+                    //关闭加载层
+                    layer.closeAll('loading');
+                    alert("发生错误,错误码:" + e.status);
+                    console.log(e.message)
+                }
+
+
+            })
+        }else {
+            return false;
+        }
+    }
+
+    function sendurls(){
+        let  urls =   document.getElementById("url").value
+
+            $.ajax({
+                url: "/sendUrls/" + urls,
+                type: "get",
+                timeout: 30000,
+                dataType: "json",
+                contentType: "application/json",
+                // data:JSON.stringify({"url":url}),
+                beforeSend: function(){
+                    layer.load(2, {time: 100*1000}); //又换了种风格，并且设定最长等待100秒
+                    var index = layer.load(1, {
+                        shade: [0.1,'#fff'] //0.1透明度的白色背景
+                    });
+                },
+                success: function (data) {
+                    //关闭加载层
+                    layer.closeAll('loading');
+                    document.getElementById("dir").innerHTML = data.msg;
+                },
+
+                error: function (e)//服务器响应失败处理函数
+                {
+                    //关闭加载层
+                    layer.closeAll('loading');
+                    alert("发生错误,错误码:" + e.status);
+                    console.log(e.message)
+                }
+
+            })
+
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>获取音乐</title>
+</head>
+<body>
+音乐名：<input type="text" name="name" id="name" placeholder="请输入音乐名"> <input type="button" onclick="subname()" value="获取">
+<br>
+<audio id="player" src="" autoplay controls ></audio>
+
+<!--音乐播放器-->
+
+
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script>
+
+    document.getElementById("player").style.display = "none";
+
+    function subname(){
+    var musicName = document.getElementById("name").value;
+    $.ajax({
+        url: "/api/getMusic",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify({"name":musicName}),
+        beforeSend: function (xhr) {
+            layer.msg("获取中。。。", {icon: 16})
+        },
+        success: function (data) {
+            //请求成功
+            if (data.code === 200) {
+                $("#player").attr("src",data.msg);
+                document.getElementById("player").style.display = "";
+                return true;
+            }
+
+            layer.msg(data.msg)
+        }
+    })
+    }
+</script>
+</body>
+</html>

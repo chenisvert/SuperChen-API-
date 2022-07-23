@@ -1,0 +1,350 @@
+package com.example.superchen.controller;
+
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.example.superchen.common.BaseContext;
+import com.example.superchen.common.UserException;
+import com.example.superchen.domain.dom.Url;
+import com.example.superchen.domain.dom.User;
+import com.example.superchen.domain.ro.Result;
+import com.example.superchen.utils.DateUtils;
+import com.example.superchen.utils.MD5Util;
+import com.example.superchen.utils.ValidateCodeUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.RandomUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import static com.example.superchen.common.RedisKey.TOKEN_KEY;
+import static com.example.superchen.common.RedisKey.USER_KET;
+
+@Slf4j
+@Controller
+@RequestMapping("/user")
+@Transactional //开启事务
+public class UserController extends BaseController {
+
+    private Result result = new Result<>();
+
+    private User user = new User();
+
+    //随机数
+    private Random random = new Random();
+
+
+
+    @RequestMapping(value = "/gomain")
+    public String goLogin() throws IOException {
+        try {
+            User users = (User) session.getAttribute("login");
+
+            if (users == null) {
+                log.info("/user/gomin 检测到未登录");
+                response.sendRedirect("../files/login/login.html");
+            }
+
+
+            LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+            //根据User::getUsername 去查getPermission
+            queryWrapper.eq(User::getUsername, users.getUsername());
+            List<User> list = userService.list(queryWrapper);
+            log.info(list.toString());
+            //遍历集合
+            List<User> collect = list.stream().map((item) -> {
+                user.setPermission(item.getPermission());
+                log.info(item.getPermission());
+                return user;
+            }).collect(Collectors.toList());
+            log.info(user.getPermission());
+            //普通用户跳转
+            if (user.getPermission().equals("user")) {
+                return "user";
+            }
+
+        } catch (NullPointerException e) {
+        }
+            return "admin/admin";
+
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Result login(@RequestBody User admin) throws IOException {
+
+        User user = new User();
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        Boolean login = userService.Login(admin);
+
+        if (login) {
+
+            //登录成功
+            //根据前端传入的用户名，查询对应
+            queryWrapper.select(User::getEmail, User::getPermission, User::getId, User::getCreateTime, User::getUsername);
+            List<User> list = userService.list(queryWrapper);
+            //遍历集合
+            list.stream().map((item) -> {
+                //将遍历出来的放入User
+                user.setEmail(item.getEmail());
+                user.setPermission(item.getPermission());
+                user.setId(item.getId());
+                user.setCreateTime(item.getCreateTime());
+                return user;
+            }).collect(Collectors.toList());
+            //将前端的参数绑定上
+            user.setUsername(admin.getUsername());
+            user.setPassword(admin.getPassword());
+            session.setAttribute("login", user);
+
+            //修改登录时间
+//            userService.updateTime(user);
+            //放入ThreadLocal
+            BaseContext.setCurrentId(user.getId());
+            //设置返回
+            result.setCode(200);
+            result.setMsg("登陆成功！，正在跳转请稍等");
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        //登陆失败
+        result.setCode(403);
+        result.setMsg("用户名或密码错误！");
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
+    @ResponseBody
+    @PostMapping("/register")
+    public Result register(@RequestBody User user) {
+        log.info("user = {}", user);
+        String password = user.getPassword();
+        password = MD5Util.getMD5(password);
+        user.setPassword(password);
+        String num = ValidateCodeUtils.generateValidateCode4String(5);
+        String token = MD5Util.getMD5(num);
+        user.setToken(token);
+        try {
+            userService.save(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("注册失败 错误：= {}", e.getMessage());
+            result.setCode(500);
+            result.setMsg("注册失败");
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        //删除用户列表的缓存
+        redisTemplate.delete(USER_KET);
+        result.setCode(200);
+        result.setMsg("注册成功");
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
+
+    @ResponseBody
+    @PostMapping("/repeat")
+    public Result repeat(String username) {
+        System.out.println(username);
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        List<User> username1 = userService.selectByUsername(username);
+        if (!username1.isEmpty()) {
+            log.info("用户名存在");
+            result.setCode(403);
+            result.setMsg("用户名已经存在");
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        return null;
+
+    }
+
+    /*
+     * 更加当前登录的用户获取其信息
+     * */
+    @ResponseBody
+    @PostMapping("/getUser")
+    public User getUser() {
+        User user = (User) session.getAttribute("login");
+        return user;
+    }
+
+    @ResponseBody
+    @GetMapping("/report")
+    public Result report( Url url) {
+        log.info(" /report 入参 ：{}",url);
+        User user = (User) session.getAttribute("login");
+        url.setCreateUser(user.getUsername());
+        urlService.save(url);
+        result.setCode(200);
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        result.setMsg("投稿成功！");
+        return result;
+    }
+
+    /*
+    * 获取token
+    * */
+    @ResponseBody
+    @PostMapping("/geToken")
+    public Result gettoken() {
+        //获取登录的用户名
+        User users = (User) session.getAttribute("login");
+        String username = users.getUsername();
+        //根据用户名查询token
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        //根据username 去找数据库匹配的用户名 查询所有
+        queryWrapper.eq(User::getUsername,username);
+        List<User> list = userService.list(queryWrapper);
+        list.stream().map((item) ->{
+            String token = item.getToken();
+            user.setToken(token);
+            return user;
+        }).collect(Collectors.toList());
+        result.setCode(200);
+        result.setMsg(user.getToken());
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
+
+
+
+    /***
+     * 获取用户总数
+     * @Author chen
+     * @Date  8:23
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
+    @ResponseBody
+    @GetMapping("/countRow")
+    public Result countRow() {
+        int count = userService.countRow();
+        result.setCode(200);
+        result.setMsg(String.valueOf(count));
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
+    @ResponseBody
+    @GetMapping("/getState")
+    public Result getState() {
+        User user = (User) session.getAttribute("login");
+        if (user == null){
+            result.setCode(403);
+            result.setMsg("未登录");
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        result.setCode(200);
+        result.setMsg("已登录");
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
+
+    @ResponseBody
+    @GetMapping("/temporaryToken")
+    public Result temporaryToken() {
+
+        Object temporaryToken = redisTemplate.opsForValue().get(TOKEN_KEY);
+        if (temporaryToken != null){
+            Long expire = redisTemplate.opsForValue().getOperations().getExpire(TOKEN_KEY,TimeUnit.MINUTES);
+            result.setCode(403);
+            result.setMsg("临时token 已经被使用，请"+expire+"分钟后再申请！");
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        String token = ValidateCodeUtils.generateValidateCode4String(5);
+        //设置token
+        redisTemplate.opsForValue().set(TOKEN_KEY,token,1, TimeUnit.HOURS);
+        result.setCode(200);
+        result.setMsg("临时token 申请成功，有效期1小时 您的token："+token);
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
+
+
+    /*
+    * 以下为后台管理
+    * */
+
+    @GetMapping("/list")
+    public  String list() throws IOException {
+        User user = (User) session.getAttribute("login");
+        //判断权限
+
+        List<User> cacheList = (List<User>) redisTemplate.opsForValue().get(USER_KET);
+
+        if (cacheList != null){
+            //回写页面
+            log.info("[log]:命中用户列表缓存！");
+            request.setAttribute("userList",cacheList);
+            return "admin/diruser";
+        }
+        //查数据库，加缓存
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByAsc(User::getId);
+        queryWrapper.select(User::getId,User::getUsername,User::getEmail,User::getPermission,User::getCreateTime,User::getToken);
+        List<User> list = userService.list(queryWrapper);
+        request.setAttribute("userList",list);
+        //生成随机数
+        int timeout = RandomUtils.nextInt(20);
+        log.info("用户列表-缓存设置成功，时间："+timeout);
+        redisTemplate.opsForValue().set(USER_KET,list,timeout,TimeUnit.HOURS);
+        return "admin/diruser";
+    }
+
+    /***
+     * 根据id删除用户
+     * @Author chen
+     * @Date  14:54
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
+    @GetMapping("/delete/{id}")
+    public  String delete(@PathVariable  Long id) throws IOException {
+        User user = (User) session.getAttribute("login");
+        //判断权限
+        if (user.getPermission().equals("user")){
+            response.sendRedirect("http://47.106.67.99/23");
+        }
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getId,id);
+        userService.remove(queryWrapper);
+        return "admin/diruser";
+    }
+
+    //测试阶段的方法，线上请删除
+//    @ResponseBody
+//    @GetMapping("/root")
+//    public  String a() throws IOException {
+//        User user = new User();
+//        user.setUsername("chen");
+//        user.setPermission("admin");
+//        session.setAttribute("login",user);
+//        return "success!";
+//    }
+
+
+
+}

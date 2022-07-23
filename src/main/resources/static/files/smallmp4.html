@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=referrer content=no-referrer>
+    <title>短视频</title>
+</head>
+
+<style>
+    #dirmp4{
+        width: 50%;
+        margin: 0 auto;
+    }
+
+</style>
+<body>
+<div id="dirmp4"></div>
+
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+
+
+<script>
+    window.onload = function getMp4() {
+        $.ajax({
+            url: "/api/mp4",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            // data: JSON.stringify({"username": username, "password": password, "email": email}),
+            beforeSend: function (xhr) {
+                layer.msg("获取中。。。", {icon: 16})
+            },
+            success: function (data) {
+                //请求频繁
+                if (data.code === 403){
+                    layer.msg(data.msg)
+                }
+               document.getElementById("dirmp4").innerHTML = '<video autoplay controls src='+data.msg+'></video>'
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

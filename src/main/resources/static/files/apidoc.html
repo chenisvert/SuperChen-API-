@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 align="center">SuperChen API 接口文档</h1>
+
+<p>接口名称：图片API</p>
+<p>介绍：随机或者指定获取图片</p>
+<p>接口地址：域名/apis/getimages/id/token</p>
+<p>调用方法:</p>
+<p>输入id为 -1时 随机返回图片地址 </p>
+<p>传入大于 0 的id返回 指定图片</p>
+
+
+<p>返回结果:</p>
+例：<span>
+{
+  "code": 200,
+  "msg": "https://w.wallhaven.cc/full/y8/wallhaven-y8vlyk.jpg",
+  "date": "2022-43-19"
+}
+
+</span>
+<p>code --- 状态码 200 代表调用成功 403 拒绝访问</p>
+<p>msg --- 响应的数据 图片的地址</p>
+<p>data --- 日期</p>
+</body>
+</html>

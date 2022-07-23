@@ -1,0 +1,183 @@
+<html lang="en" class="no-js" xmlns="http://www.w3.org/1999/html"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>login</title>
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/three.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            font-size: 16px;
+            background: url("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2019-11-05%2F5dc11c6205de6.jpg&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660556989&t=a47095795258e73b37db578eeff58e35") no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .login{
+            max-width: 80%;
+            height: auto;
+            color: deeppink;
+            text-align: center;
+        }
+        .login input{
+            font-size: 30px;
+            color: pink;
+            line-height: 2px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        #sb{
+            width: 80px;
+            height: 40px;
+            background: #ec8c69;
+            border: 1px #ec8c69 solid;
+            color: #fff;
+            transition: 0.3s ease; cursor: pointer;
+            opacity: 0.5;
+
+        }
+
+        #sb:hover{
+            transform: scale(1.25);
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 1;
+        }
+        h1{
+            color: #ec6fa3;
+
+        }
+
+    </style>
+</head>
+<body>
+<div id="loading-v3">
+
+    <div id="loading-v3-bg"></div>
+    <div id="loading-v3-box">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="login">
+    <h1 align="center" style="font-size: 20px">登录</h1>
+    用 户 名 ：<input type="text" id="username" name="username"><br>
+
+    密  码 ： &nbsp; &nbsp;<input type="password" id="password" name="password"><br>
+    <input type="button" id="sb" name="sb" onclick="logins()" value="登录" class="btn btn-primary btn-lg" style="font-size: 13px">
+    <a href="register.html"  class="btn btn-primary btn-lg">注册</a>
+
+</div>
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+
+<script>
+
+    function logins(){
+
+
+        var username = $("#username").val();
+        var password = $("#password").val();
+
+
+        if (username === '') {
+            layer.msg("请填写用户名")
+            return false;
+        }else if(password === '') {
+            layer.msg("请填写密码")
+            return false;
+        }
+
+
+        $.ajax({
+            url:"/user/login",
+            type:"post",
+            dataType:"json",
+            contentType: "application/json",
+            data:JSON.stringify({"username":username,"password":password}),
+            beforeSend: function (xhr) {
+                layer.msg("登录中",{icon:16})
+            },
+            success: function (data) {
+                layer.msg(data.msg)
+                //登录成功跳转后台
+                if (data.code === 200){
+                    layer.msg(data.msg)
+                    window.location.replace("/user/gomain");
+                }
+            },
+
+            error: function (e)//服务器响应失败处理函数
+            {
+                alert("发生错误,错误码:"+e.status);
+                console.log(e.message)
+            }
+
+        })
+
+
+
+
+    }
+
+</script>
+
+
+
+<script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+<script>
+
+    //去掉动画
+    window.onload = function(){
+        document.getElementById("loading-v3").style.display = "none"
+    }
+
+    L2Dwidget.init({
+        //初音
+        // "model": { "jsonPath":"https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json", "scale": 1, "hHeadPos":0.5, "vHeadPos":0.618 },
+        //可爱女
+        "model": { "jsonPath":"https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json", "scale": 1, "hHeadPos":0.5, "vHeadPos":0.618 },
+        //可爱男
+        // "model": {"jsonPath":"https://unpkg.com/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json", "scale": 1, "hHeadPos":0.5, "vHeadPos":0.618 },
+        // 小帅哥： https://unpkg.com/live2d-widget-model-chitose@1.0.5/assets/chitose.model.json
+        // 萌娘：https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json
+        // 白猫：https://unpkg.com/live2d-widget-model-tororo@1.0.5/assets/tororo.model.json
+        // 黑猫： https://unpkg.com/live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json
+        // 小可爱（女）：https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json
+        // 小可爱（男）：https://unpkg.com/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json
+        // 初音：https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json
+        // 圣职者妹妹：https://unpkg.com/live2d-widget-model-z16@1.0.5/assets/z16.model.json
+        // 茶杯犬：https://cdn.jsdelivr.net/npm/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json
+        // 绿毛妹妹：https://unpkg.com/live2d-widget-model-tsumiki@1.0.5/assets/tsumiki.model.json
+        // 金龟子妹妹：https://unpkg.com/live2d-widget-model-unitychan@1.0.5/assets/unitychan.model.json
+        // https://unpkg.com/live2d-widget-model-nito@1.0.5/assets/nito.model.json
+        // https://unpkg.com/live2d-widget-model-ni-j@1.0.5/assets/ni-j.model.json
+        // 小阿狸： https://unpkg.com/live2d-widget-model-nico@1.0.5/assets/nico.model.json
+        // https://unpkg.com/live2d-widget-model-nietzche@1.0.5/assets/nietzche.model.json
+        // https://unpkg.com/live2d-widget-model-nipsilon@1.0.5/assets/nipsilon.model.json
+        // 女学生： https://unpkg.com/live2d-widget-model-hibiki@1.0.5/assets/hibiki.model.json
+        "display": { "position": "right", "width": 200, "height":300, "hOffset": 0, "vOffset": 0 },
+        "mobile": { "show": true, "scale": 0.2 },
+        "react": { "opacityDefault": 0.6, "opacityOnHover": 0.2 }
+    });
+</script>
+
+</body></html>

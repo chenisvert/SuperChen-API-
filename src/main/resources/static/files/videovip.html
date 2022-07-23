@@ -1,0 +1,418 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta
+      name="全网VIP影视会员解析-爱艺网"
+      content="支持爱奇艺、优酷、土豆、乐视、搜狐等视频解析."
+    />
+    <meta name="azure0000" content="VIP影视会员" />
+    <title>SuperChen & 在线解析</title>
+    <!-- Favicon -->  
+    <link
+      href="./assets/vendor/font-awesome/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link
+      type="text/css"
+      href="./assets/css/argon.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header class="header-global">
+      <nav
+        id="navbar-main"
+        class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom"
+      >
+        <div class="container">
+            <a class="navbar-brand smooth " style="font-size: large" href="#">接口来之不易，请勿滥用</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbar_global"
+            aria-controls="navbar_global"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-collapse collapse" id="navbar_global">
+            
+            <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+              <li class="nav-item">
+                <a
+                  class="nav-link nav-link-icon"
+                  href="#"
+                  target="_blank"
+                  data-toggle="tooltip"
+                  title="免费虚拟主机"
+                >
+                  <i class="fa fa-shopping-cart"></i>
+                  <span class="nav-link-inner--text d-lg-none">博客</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link nav-link-icon"
+                  href="https://47.106.67.99"
+                  target="_blank"
+                  data-toggle="tooltip"
+                  title="Follow us on Youtube"
+                >
+                  <i class="fa fa-youtube"></i>
+                  <span class="nav-link-inner--text d-lg-none">Youtube</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link nav-link-icon"
+                  href="#"
+                  target="_blank"a
+                  data-toggle="tooltip"
+                  title="爱艺网"
+                >
+                  <i class="fa fa-viadeo-square"></i>
+                  <span class="nav-link-inner--text d-lg-none">爱艺网</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link nav-link-icon"
+                  href="#"
+                  target="_blank"
+                  data-toggle="tooltip"
+                  title="Star us on Github"
+                >
+                  <i class="fa fa-github"></i>
+                  <span class="nav-link-inner--text d-lg-none">Github</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!---->
+    <main class="profile-page">
+      <section class="section-profile-cover section-shaped my-0">
+        <!-- Circles background -->
+        <div class="shape shape-style-1 shape-primary alpha-4">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <!-- SVG separator -->
+        <div class="separator separator-bottom separator-skew">
+          <svg
+            x="0"
+            y="0"
+            viewBox="0 0 2560 100"
+            preserveAspectRatio="none"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon
+              class="fill-white"
+              points="2560 0 2560 100 0 100"
+            ></polygon>
+          </svg>
+        </div>
+      </section>
+      <section class="section">
+        <div class="container" >
+          <div class="card card-profile shadow mt--300 ">
+            <div class="px-4">
+              <div class="row justify-content-center">
+                <div class="col-lg-3 order-lg-2">
+                  <div class="card-profile-image">
+                    <a href="#">
+                      <img
+                        src="./assets/img/logo.png"
+                        class="rounded-bottom"
+                      />
+                    </a>
+                  </div>
+                </div>
+                <div
+                  class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center"
+                >
+                </div>
+                <div class="col-lg-4 order-lg-1">
+                  <div class="card-profile-stats d-flex justify-content-center">
+                    <div>
+                      <span class="heading" id="xl">0</span>
+                      <span class="description">解析线路</span>
+                    </div>
+                    <div>
+                      <span class="heading">8+</span>
+                      <span class="description">视频网站</span>
+                    </div>
+                    <div>
+                      <span class="heading">1+</span>
+                      <span class="description">全平台</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hr mt-4"></div>
+              <form>
+                    <div class="form-group row">
+<!--                      <span class="col-sm-2 col-form-label text-right">请选择API:</span>-->
+                      线路：<input type="number" id="urlnum" value="1" placeholder="请输入线路">
+                      <div class="col-sm-10">
+
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                            <span class="col-sm-2 col-form-label text-right ">视频地址:</span>
+                      <div class="col-sm-10">
+                          <label for="url"></label><input type="url" class="form-control" id="url" placeholder="视频地址">
+                      </div>
+                    </div>
+                    <div class=" text-center">
+<!--                            <button id="p" onclick="suburl()" class="btn btn-primary btn-round"-->
+<!--                              ><i class=""></i> 开 始 解 析</button>-->
+
+                        <input type="button" value="开 始 解 析" onclick="suburl()">
+                          </div>
+                          </br>
+                          <div class=" text-center">
+                         <button href=""  class="btn btn-primary btn-round"
+                              ><i class="fa fa-send-o"></i> 使用方法：复制任意视频网站VIP链接，粘贴到视频地址栏，点击开始解析即可</button
+                            >
+</div>
+                  </form>
+
+                  <div class="main text-center sr-only sr-only-focusable">
+                      <div class="form-horizontal">
+                        <div class="form-group">
+                          <div class="col-sm-10">
+                            <textarea rows="10" id="apiList" class="form-control" name="ajax">
+
+                 </textarea>
+                          </div>
+                        </div>
+                        </div>
+                      </div> 
+                  
+
+              <div class="mt-5 py-5 border-top text-center">
+                <div class="row justify-content-center">
+                  <div class="col-sm-9">
+                                           
+                      <a class="btn btn-success mt-3" href="http://www.le.com/" rel="nofollow" target="_blank">乐视视频</a>
+                      <a class="btn btn-danger mt-3" href="http://www.iqiyi.com/" rel="nofollow" target="_blank">奇艺视频</a>                      
+                      <a class="btn btn-info mt-3" href="http://www.mgtv.com/" rel="nofollow" target="_blank">芒果视频</a>
+                      <a class="btn btn-warning  mt-3" href="http://www.tudou.com/" rel="nofollow" target="_blank">土豆视频</a>		
+                                      
+                  <br>
+                  <div class="hr "></div>                                
+                      <a class="btn btn-primary mt-3" href="http://v.qq.com/" rel="nofollow" target="_blank">腾讯视频</a>		
+                      <a class="btn btn-info mt-3" href="http://www.youku.com/" rel="nofollow" target="_blank">优酷视频</a>
+                      <a class="btn btn-success mt-3" href="http://tv.sohu.com/" rel="nofollow" target="_blank">搜狐视频</a>
+                      <a class="btn btn-primary mt-3" href="http://www.pptv.com/" rel="nofollow" target="_blank">pptv视频</a>
+                 
+                
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="row row-grid align-items-center mb-5">
+          <div class="col-lg-6">
+            <h3 class="text-primary font-weight-light mb-2">
+              解析接口均来源于网络
+            </h3>
+
+          </div>
+          <div class="col-lg-6 text-lg-center btn-wrapper">
+            <a
+              target="_blank"
+              href="http://www.jocat.cn/"
+              class="btn btn-neutral btn-icon-only btn-twitter btn-round btn-lg"
+              data-toggle="tooltip"
+              data-original-title="Follow us"
+            >
+              <i class="fa fa-qq"></i>
+            </a>
+            <a
+              target="_blank"
+              href="https://www.youtube.com/"
+              class="btn btn-neutral btn-icon-only btn-facebook btn-round btn-lg"
+              data-toggle="tooltip"
+              data-original-title="Like us"
+            >
+              <i class="fa  fa-youtube-play"></i>
+            </a>
+            <a
+              target="_blank"
+              href="https://space.bilibili.com/"
+              class="btn btn-neutral btn-icon-only btn-dribbble btn-lg btn-round"
+              data-toggle="tooltip"
+              data-original-title="Follow us"
+            >
+              <i class="fa fa-dribbble"></i>
+            </a>
+            <a
+              target="_blank"
+              href="https://github.com/chenisvert"
+              class="btn btn-neutral btn-icon-only btn-github btn-round btn-lg"
+              data-toggle="tooltip"
+              data-original-title="Star on Github"
+            >
+              <i class="fa fa-github"></i>
+            </a>
+          </div>
+        </div>
+        <hr />
+        <div class="row align-items-center justify-content-md-between">
+          <div class="col-md-6">
+            <div class="copyright">
+              &copy; 2022
+              <a href="#" target="_blank"
+                >SuperChen Api</a
+              >.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <ul class="nav nav-footer justify-content-end">
+
+              <li class="nav-item">
+                <a
+                  href="http://chen.upxx.top"
+                  class="nav-link"
+                  target="_blank"
+                  >官网</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  href="http://47.106.67.99"
+                  class="nav-link"
+                  target="_blank"
+                  >博客</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Core -->
+  </div>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../layer/layer.js"></script>
+<script>
+	console.group("欢迎使用SuperChen 视频解析");
+		console.log("github地址：");
+		console.log("QQ交流群: http://www./");
+		console.log("欢迎前来围观、吐槽、点赞、学习、STAR......");
+	console.groupEnd();
+
+	console.group("作者信息");
+		console.log("网名：SuperChen ");
+		console.log("博客：http://47.106.67.99");
+	console.groupEnd();
+
+function suburl() {
+ let  url =  document.getElementById("url").value;
+  var id = document.getElementById("urlnum").value;
+
+
+  if (url === ''){
+    layer.msg("请输入视频链接",{icon: 5})
+    return false;
+  }else if(id === ''){
+    layer.msg("请输入线路",{icon:5})
+    return false;
+  }
+
+  $.ajax({
+    url: "/vipVideo/list",
+    type: "post",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify({"id": id}),
+    // error: function (e)//服务器响应失败处理函数
+    // {
+    //   //关闭加载层
+    //   layer.closeAll('loading');
+    //   alert("发生错误,错误码:" + e.status);
+    //   console.log(e.message)
+    // },
+    success: function (data) {
+
+      if (data.code === 403){
+        alert(data.msg)
+      }else if (data.code === 201){
+          alert(data.msg)
+      }else if (data.code === 200) {
+          //进入解析
+          window.location.href = data.msg + url;
+      }
+
+      }
+
+
+
+  })
+
+}
+//获取线路总数
+window.onload = function (){
+  $.ajax({
+    url: "/vipVideo/countRow",
+    type: "get",
+    dataType: "json",
+    contentType: "application/json",
+    success: function (data) {
+      document.getElementById("xl").innerHTML = data.msg;
+    },
+    error: function (e)//服务器响应失败处理函数
+    {
+      //关闭加载层
+      layer.closeAll('loading');
+      alert("发生错误,错误码:" + e.status);
+      console.log(e.message)
+    },
+
+
+
+  })
+
+}
+</script>
+
+<script src="../assets/vendor/jquery/jquery.min.js"></script>
+<script src="../assets/vendor/popper/popper.min.js"></script>
+<script src="../assets/vendor/bootstrap/bootstrap.min.js"></script>
+<script src="../assets/vendor/headroom/headroom.min.js"></script>
+<script src="../assets/js/argon.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Copyright © 2020 by m@mcloc.cn -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperChen API 平台 </title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css'>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/three.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .wrap {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            background-image: url("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic4.zhimg.com%2Fv2-cd4b852e550163fa59c9e382da2da100_1440w.jpg%3Fsource%3D172ae18b&refer=http%3A%2F%2Fpic4.zhimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660806197&t=3123d64de29af4ca57695bf9ffdb3fc6");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .wrap-son {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            background: rgba(59, 59, 59, 0.3);
+        }
+
+        .jumbotron {
+            background: rgba(255, 255, 255, 0);
+            color: #f5f5f5;
+        }
+
+        .love {
+            color: #ffffff;
+            margin: 0 20px;
+            line-height: 1.3;
+            font-weight: 300;
+        }
+
+        .hans-container {
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+            height: 120px;
+            z-index: 1;
+        }
+
+        .timer b {
+            font-size: 50px;
+        }
+
+        #s {
+            font-size: 80px;
+        }
+
+        #updatalove,
+        #to_comments {
+            margin: 0 10px;
+        }
+
+        .copy {
+            position: absolute;
+            bottom: 0;
+            color: #ffffff;
+            font-size: 12px;
+        }
+
+        /* 评论 */
+        .comment {
+            margin-top: 30px;
+            margin-bottom: 100px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!--动画-->
+<div id="loading-v3">
+
+    <div id="loading-v3-bg"></div>
+    <div id="loading-v3-box">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+    <div class="wrap">
+        <div class="wrap-son">
+            <div class="container-fluid">
+                <div class="box">
+                    <div class="jumbotron text-center">
+                        <h1>提供免费，开放，稳定的Api </h1>
+                        <h3 class="timer">
+                            <div class="row">
+                                <b id="d"></b> 天 <b id="h"></b> 时 <b id="m"></b> 分
+                            </div>
+                            <div class="row" >
+                                <b id="s"></b> 秒
+                            </div >
+                        </h3>
+                        <p>
+                            <a id="to_comments" class="btn btn-primary btn-lg" role="button">留言</a>
+                            <a id="to_comments1" class="btn btn-primary btn-lg" role="button" href="files/log.html">更新日志</a>
+                            <a id="to_comments3" class="btn btn-primary btn-lg" role="button" href="files/apidoc.html">API 文档</a>
+                            <a id="to_comments2" class="btn btn-primary btn-lg" role="button" href="files/safetyaccess.html">提取文本</a><br>
+                            <a id="login" class="btn btn-primary btn-lg" role="button" href="files/login/login.html" style="color: palevioletred">用户登录</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <h4 class="love text-center"><span class="love-son"></span></h4>
+                </div>
+                <div id="hans-bolang"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" id="comments">
+        <div class="row comment">
+            <div class="col-xs-10 col-sm-10 col-md-6 col-xs-push-1 col-sm-push-1 col-md-push-3">
+                <h2>留言：</h2>
+                <div id="vcomments"></div>
+            </div>
+        </div>
+    </div>
+    <script src="js/dh.js"></script>
+    <script src="js/jquery-1.11.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src='js/Valine.min.js'></script><!-- Valine 评论系统 -->
+
+    <!-- 计时器 -->
+    <script>
+        function timer() {
+            var start = new Date(2022, 01, 14, 23, 45, 00); //原作者有bug，日期为2020.02.15
+            var t = new Date() - start;
+            var h = ~~(t / 1000 / 60 / 60 % 24);
+            if (h < 10) {
+                h = "0" + h;
+            }
+            var m = ~~(t / 1000 / 60 % 60);
+            if (m < 10) {
+                m = "0" + m;
+            }
+
+            var s = ~~(t / 1000 % 60);
+            if (s < 10) {
+                s = "0" + s;
+            }
+            document.getElementById('d').innerHTML = ~~(t / 1000 / 60 / 60 / 24);
+            document.getElementById('h').innerHTML = h;
+            document.getElementById('m').innerHTML = m;
+            document.getElementById('s').innerHTML = s;
+        }
+        timer();
+        setInterval(timer, 1000);
+    </script>
+
+    <script>
+        var oComments = document.querySelector("#comments");
+        var oCommentsTop = Math.round(oComments.offsetTop);
+        //运动框架
+        function move() {
+            // 1. 关闭开启定时器;
+            clearInterval(timer);
+            var timer = setInterval(function () {
+                // 2. 计算速度;
+                var iNow = document.documentElement.scrollTop || document.body.scrollTop; //100
+                iNow = Math.round(iNow);
+                var speed = (oCommentsTop - iNow) / 10;
+                // 3. 速度取整;
+                if (speed > 0) {
+                    speed = Math.ceil(speed);
+                } else {
+                    speed = Math.floor(speed);
+                }
+                document.documentElement.scrollTop = document.body.scrollTop = iNow + speed + 1;
+                // 4. 终止条件;
+                if (iNow >= oCommentsTop) {
+                    clearInterval(timer);
+                }
+            }, 20)
+        }
+
+        to_comments.onclick = move;
+    </script>
+
+    <!-- 情话接口 -->
+    <script>
+        //进入页面时请求
+        $.ajax({
+            url: 'php/love.php',
+            type: "GET",
+            async: true,
+            data: "type=json",
+            dataType: "json",
+            success: function (loveJson) {
+                let love = loveJson["data"];
+                $(".love-son").append(love);
+            },
+            error: function (textStatus) {
+                console.log(JSON.stringify(textStatus));
+            }
+        });
+
+        //点击时请求
+        $(".love").click(function () {
+            $.ajax({
+                url: 'php/love.php',
+                type: "GET",
+                async: true,
+                data: "type=json",
+                dataType: "json",
+                success: function (loveJson) {
+                    let love = loveJson["data"];
+                    love = `<span class="love-son"">${love}</span>`;
+                    $(".love").children().replaceWith(love);
+                },
+                error: function (textStatus) {
+                    console.log(JSON.stringify(textStatus));
+                }
+            });
+        });
+
+        $("#updatalove").click(function () {
+            $.ajax({
+                url: 'php/love.php',
+                type: "GET",
+                async: true,
+                data: "type=json",
+                dataType: "json",
+                success: function (loveJson) {
+                    let love = loveJson["data"];
+                    love = `<span class="love-son"">${love}</span>`;
+                    $(".love").children().replaceWith(love);
+                },
+                error: function (textStatus) {
+                    console.log(JSON.stringify(textStatus));
+                }
+            });
+        });
+
+
+
+
+        //去掉动画
+        window.onload = function(){
+            document.getElementById("loading-v3").style.display = "none"
+        }
+
+
+    </script>
+
+    <!-- Valine 评论系统； 由 LeanCloud 管理数据 -->
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'CW70Y8gzuaHy2xsyBDftke40-gzGzoHsz',
+            appKey: 'DoSF6Hi6bXyEMUGpfr3xkDqE'
+        })
+    </script>
+
+    <!-- 底部波浪 -->
+    <script src="php/wave.php"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册</title>
+
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<style>
+
+  input{
+    margin-top: 20px;
+  }
+  body{
+    background:url("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farticle%2F8cb013bdfccdf1962b55ca5b12433f24dabf5ff9.jpg&refer=http%3A%2F%2Fi0.hdslb.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1659077305&t=363f514a5eaaab08916c64c9900960a0");
+  }
+  .from{
+    max-width: 80%;
+    height: auto;
+    margin:0 auto;
+    text-align: center;
+    justify-content: center;
+    line-height: 2px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+
+  #sb{
+    width: 80px;
+    height: 40px;
+    background:  #5cb85c;
+    border: 1px pink solid;
+    color: #fff;
+    transition: 0.3s ease;
+    cursor: pointer;
+    opacity: 0.5;
+  }
+
+  #sb:hover{
+    transform: scale(1.25);
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 1;
+  }
+
+</style>
+<body>
+
+<h1 align="center" style="font-size: 20px">注册</h1>
+<div class="from">
+  用 户 名 ：<input type="text" id="username" name="username" onblur="repeatusername()"><br>
+
+  密  码 ：<input type="password" id="password" name="password"><br>
+
+  邮箱：<input type="email" id="email" name="email"><br>
+  <input type="button" id="sb" name="sb" onclick="register()" value="注册"    style="margin-left: 100px " class="btn btn-primary btn-lg" style="font-size: 13px">
+</div>
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+
+
+<script>
+
+<!--  检测是否用户名重复-->
+  function repeatusername(){
+    var username = $("#username").val();
+
+    $.ajax({
+      url:"/user/repeat",
+      type:"post",
+      dataType:"json",
+      data:{"username":username},
+      success: function (data) {
+
+        if (data.code  === 403){
+          $("#username").val("");
+          alert("用户名已被注册！")
+        }
+      }
+    })
+
+  }
+
+
+
+    function register(){
+
+      var username = $("#username").val();
+      var password = $("#password").val();
+      var email = $("#email").val();
+
+
+
+      if (username === '' | password === '') {
+        layer.msg("用户名或密码不能为空哦")
+        return false;
+      } else if (email === '') {
+        layer.msg("邮箱不能为空哦！")
+        return false;
+      } else if (password.length < 5) {
+        layer.msg("密码太短了！", {icon: 2})
+        return false;
+      } else if (password.length > 20) {
+        layer.msg("密码太长了！", {icon: 2})
+        return false;
+      }
+
+      //验证邮箱格式
+      var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      let  mail =  reg.test(email);
+      if (mail === false){
+        layer.msg("邮箱格式不正确！",{icon: 8})
+        return false;
+      }
+
+
+      $.ajax({
+            url:"/user/register",
+            type:"post",
+            dataType:"json",
+            contentType: "application/json",
+            data:JSON.stringify({"username":username,"password":password,"email":email}),
+            beforeSend: function (xhr) {
+              layer.msg("注册中",{icon:16})
+            },
+            success: function (data) {
+                if (data.code === 200){
+                    layer.msg(data.msg,{icon:6})
+                    //清除数据
+                    $("#username").val("");
+                    $("#password").val("");
+                    $("#email").val("");
+                }else{
+                    layer.msg("注册失败!",{icon:2})
+                }
+
+
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

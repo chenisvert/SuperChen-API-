@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.datasource.druid.driver-class-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.druid.driver-class-name."
+  }
+] }
