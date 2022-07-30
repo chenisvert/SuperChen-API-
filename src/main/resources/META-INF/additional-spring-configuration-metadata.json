@@ -4,5 +4,15 @@
       "name": "spring.datasource.druid.driver-class-name",
       "type": "java.lang.String",
       "description": "Description for spring.datasource.druid.driver-class-name."
-  }
-] }
+    },
+    {
+      "name": "baidu.ak",
+      "type": "java.lang.String",
+      "description": "Description for baidu.ak."
+    },
+    {
+      "name": "baidu.ak",
+      "type": "java.lang.String",
+      "description": "Description for baidu.ak."
+    }
+  ] }

@@ -160,7 +160,8 @@ public class UserController extends BaseController {
     public Result repeat(String username) {
         System.out.println(username);
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        List<User> username1 = userService.selectByUsername(username);
+        queryWrapper.eq(User::getUsername,username);
+        List<User> username1 = userService.list(queryWrapper);
         if (!username1.isEmpty()) {
             log.info("用户名存在");
             result.setCode(403);

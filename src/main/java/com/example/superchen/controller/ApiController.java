@@ -65,7 +65,7 @@ public class ApiController extends BaseController {
         return result;
     }
 
-    @PostMapping("/myMp4")
+    @RequestMapping("/myMp4")
     public Result myMp4() {
         Url url1 = new Url();
         User user = (User) session.getAttribute("login");

@@ -2,8 +2,8 @@ package com.example.superchen.api;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,28 +12,16 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-/*
-* 百度地图api IP地址查询
-* */
-@Component
-public class BaiduAddressUtil {
-
-    /**
-     * 百度地图申请的ak
-     */
-//    @Value("${baidu.ak}")
-    private String AK = "LYtAh4tS4jA0GxG0qwwZK4ylQWLRch27";
-
-    public String getAddress(String ip) {
+public class getText {
+    public String getTexts() {
         String address = "";
         try {
-            // 这里调用百度的ip定位api服务 详见 http://api.map.baidu.com/lbsapi/cloud/ip-location-api.htm
-            JSONObject resultJson = readJsonFromUrl("http://api.map.baidu.com/location/ip?ip=" + "47.106.67.99" + "&ak=" + AK);
-            //resultJson 是返回结果，当前只取位置信息
-            address = ((JSONObject) resultJson.get("content")).getString("address");
+            JSONObject resultJson = readJsonFromUrl("https://api.kit9.cn/api/sentence");
+            address = ((JSONObject) resultJson.get("data")).getString("text");
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println(address);
         return address;
     }
 

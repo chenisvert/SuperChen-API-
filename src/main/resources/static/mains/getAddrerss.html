@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>获取地理位置</title>
+</head>
+<body>
+<span>您的位置是：</span><span id="dirAddress"></span>
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script>
+    window.onload = function () {
+
+            $.ajax({
+                url: "/apis/getAddress/1218e18ccb609c468d2331ecc663544e",
+                type: "get",
+                dataType: "json",
+                contentType: "application/json",
+                beforeSend: function (xhr) {
+                    layer.load(2, {time: 100 * 1000}); //又换了种风格，并且设定最长等待100秒
+                },
+                success: function (data) {
+                    //请求频繁
+                    if (data.code === 200) {
+                        //关闭加载层
+                        layer.closeAll('loading');
+                        document.getElementById("dirAddress").innerHTML = data.msg;
+                    }
+
+                    layer.msg(data.msg)
+
+
+                }
+            })
+
+    }
+
+</script>
+</body>
+</html>

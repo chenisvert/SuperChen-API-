@@ -113,6 +113,12 @@
             <artifactId>core</artifactId>
             <version>3.3.3</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.zxing/javase -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.3.0</version>
+        </dependency>
         <!--引入ThymeLeaf-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

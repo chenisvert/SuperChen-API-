@@ -14,7 +14,7 @@ public class corsFilter1 implements WebMvcConfigurer {
         registry.addMapping("/**")  // 匹配所有的路径
                 .allowCredentials(true) // 设置允许凭证
                 .allowedHeaders("*")   // 设置请求头
-                .allowedMethods("GET"); //允许所有GET 请求跨域
+                .allowedMethods("GET", "POST"); //允许所有GET 请求跨域
 //                .allowedOriginPatterns("*");
     }
 }

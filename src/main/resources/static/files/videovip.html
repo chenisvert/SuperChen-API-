@@ -327,7 +327,9 @@
 <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="../js/jquery-3.3.1.js"></script>
     <script src="../layer/layer.js"></script>
-<script>
+    <script src="../js/popMessage.js"></script>
+
+    <script>
 	console.group("欢迎使用SuperChen 视频解析");
 		console.log("github地址：");
 		console.log("QQ交流群: http://www./");
@@ -368,9 +370,9 @@ function suburl() {
     success: function (data) {
 
       if (data.code === 403){
-        alert(data.msg)
+        Message.error(data.msg)
       }else if (data.code === 201){
-          alert(data.msg)
+          Message.error(data.msg)
       }else if (data.code === 200) {
           //进入解析
           window.location.href = data.msg + url;

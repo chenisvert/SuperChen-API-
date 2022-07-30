@@ -60,6 +60,7 @@
 </div>
 <script src="../js/jquery-3.3.1.js"></script>
 <script src="../layer/layer.js"></script>
+<script src="../js/popMessage.js"></script>
 
 
 <script>
@@ -77,7 +78,7 @@
 
         if (data.code  === 403){
           $("#username").val("");
-          alert("用户名已被注册！")
+          Message.error("用户名已被注册！")
         }
       }
     })
