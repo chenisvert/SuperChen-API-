@@ -11,6 +11,7 @@ import com.example.superchen.utils.GenerateCodeUtils;
 import com.example.superchen.utils.IPUtil;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -297,9 +298,19 @@ public class PubicApiController extends BaseController {
 
     }
 
+    /***
+     *
+     * 根据ip获取地理位置
+     * @Author chen
+     * @Date  21:49
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
     @GetMapping("/getAddress/{token}")
     public Object getWz(@PathVariable String token ) throws IOException {
-
+        BaiduAddressUtil baiduAddressUtil = new BaiduAddressUtil();
         log.info("入参  token：{}", token);
 //        Object tockens = this.redisTemplate.opsForValue().get("token");
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper();
@@ -308,10 +319,24 @@ public class PubicApiController extends BaseController {
         System.out.println(userList);
         if (userList.size() != 0) {
             log.info("认证成功！");
-            String ipAddr = IPUtil.getIpAddr(request);
+            String addressCaChe = (String) redisTemplate.opsForValue().get(KEY + "_getAddress");
+            if (addressCaChe != null){
+                String address = baiduAddressUtil.getAddress(addressCaChe);
+                log.info("命中缓存：getAddress");
+                result.setCode(200);
+                result.setMsg(address);
+                result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+                return result;
+            }
+            log.info("无缓存命中——getAddress");
+//            String ipAddr = IPUtil.getIpAddr(request);
+            String ipAddr = "47.106.67.99";
             log.info(ipAddr);
-            BaiduAddressUtil baiduAddressUtil = new BaiduAddressUtil();
+
             String address = baiduAddressUtil.getAddress(ipAddr);
+            //缓存
+            int timeOut = Integer.parseInt(RandomStringUtils.randomNumeric(2));
+            redisTemplate.opsForValue().set(KEY+"_getAddress",ipAddr,timeOut,TimeUnit.HOURS);
             result.setCode(200);
             result.setMsg(address);
             result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));

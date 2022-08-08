@@ -28,7 +28,7 @@ public class BaiduAddressUtil {
         String address = "";
         try {
             // 这里调用百度的ip定位api服务 详见 http://api.map.baidu.com/lbsapi/cloud/ip-location-api.htm
-            JSONObject resultJson = readJsonFromUrl("http://api.map.baidu.com/location/ip?ip=" + "47.106.67.99" + "&ak=" + AK);
+            JSONObject resultJson = readJsonFromUrl("http://api.map.baidu.com/location/ip?ip=" + ip + "&ak=" + AK);
             //resultJson 是返回结果，当前只取位置信息
             address = ((JSONObject) resultJson.get("content")).getString("address");
         } catch (Exception e) {
