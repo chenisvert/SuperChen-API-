@@ -53,6 +53,8 @@ public class BaseController {
     protected VipvideoService vipvideoService;
     @Resource
     protected PubicApiService pubicApiService;
+    @Resource
+    protected IpAddressService ipAddressService;
 
 
 

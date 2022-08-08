@@ -1,11 +1,14 @@
 package com.example.superchen.controller;
 
+import com.alibaba.druid.support.http.util.IPAddress;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.superchen.api.BaiduAddressUtil;
 import com.example.superchen.api.getText;
+import com.example.superchen.domain.dom.IpAddress;
 import com.example.superchen.domain.dom.Url;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
+import com.example.superchen.service.IpAddressService;
 import com.example.superchen.utils.DateUtils;
 import com.example.superchen.utils.GenerateCodeUtils;
 import com.example.superchen.utils.IPUtil;
@@ -311,32 +314,53 @@ public class PubicApiController extends BaseController {
     @GetMapping("/getAddress/{token}")
     public Object getWz(@PathVariable String token ) throws IOException {
         BaiduAddressUtil baiduAddressUtil = new BaiduAddressUtil();
+        IpAddress addresssIp = new IpAddress();
+        int timeOut = Integer.parseInt(RandomStringUtils.randomNumeric(2));
+        String ipAddr = IPUtil.getIpAddr(request);
         log.info("入参  token：{}", token);
 //        Object tockens = this.redisTemplate.opsForValue().get("token");
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper();
+        LambdaQueryWrapper<IpAddress> queryWrapperip = new LambdaQueryWrapper();
         queryWrapper.eq(User::getToken,token);
         List<User> userList = userService.list(queryWrapper);
         System.out.println(userList);
         if (userList.size() != 0) {
             log.info("认证成功！");
-            String addressCaChe = (String) redisTemplate.opsForValue().get(KEY + "_getAddress");
+            //加入缓存
+            String addressCaChe = (String) redisTemplate.opsForValue().get(ipAddr);
             if (addressCaChe != null){
-                String address = baiduAddressUtil.getAddress(addressCaChe);
                 log.info("命中缓存：getAddress");
                 result.setCode(200);
-                result.setMsg(address);
+                result.setMsg(addressCaChe);
                 result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
                 return result;
             }
             log.info("无缓存命中——getAddress");
-//            String ipAddr = IPUtil.getIpAddr(request);
-            String ipAddr = "47.106.67.99";
+
+            queryWrapperip.eq(IpAddress::getIp,ipAddr);
+            List<IpAddress> list = ipAddressService.list(queryWrapperip);
+            if (!list.isEmpty()){
+                //数据库查到了
+                log.info("ip数据库命中！");
+                //遍历集合
+                list.stream().map((item) -> {
+                    addresssIp.setAddress(item.getAddress());
+                    return addresssIp;
+                }).collect(Collectors.toList());
+                result.setCode(200);
+                result.setMsg(addresssIp.getAddress());
+                result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+                return result;
+            }
+
             log.info(ipAddr);
 
             String address = baiduAddressUtil.getAddress(ipAddr);
-            //缓存
-            int timeOut = Integer.parseInt(RandomStringUtils.randomNumeric(2));
-            redisTemplate.opsForValue().set(KEY+"_getAddress",ipAddr,timeOut,TimeUnit.HOURS);
+
+            //新ip 放入ip数据库
+            addresssIp.setIp(ipAddr);
+            addresssIp.setAddress(address);
+            ipAddressService.save(addresssIp);
             result.setCode(200);
             result.setMsg(address);
             result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));

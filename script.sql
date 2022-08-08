@@ -61,6 +61,20 @@ create table vipvideo
         unique (url)
 );
 
+
+create table ipaddress
+(
+    id          int auto_increment
+        primary key,
+    ip          varchar(40)  not null,
+    address     varchar(100) not null,
+    create_time datetime     not null,
+    constraint ipaddress_id_uindex
+        unique (id),
+    constraint ipaddress_ip_uindex
+        unique (ip)
+);
+
 INSERT INTO network.mp4url (id, url, create_time, create_user, state, sisk, remark) VALUES (1, 'https://apd-vlive.apdcdn.tc.qq.com/vipzj.video.tc.qq.com/w0017mxh0c4.mp4?vkey=1A3A2FD5B8064F387747B82416951BABC78E26F0A940D32225FE371E6C037EE69FECBF185B4DDA29C823DC2243A733089804AEE0F649C2D16D2696177DD3FF0C86AF4A578C437C0806AE1B8720BF1CC413B64D19A704825C825ED707FA23A6C4A856FCA698370F92080C3371DD3701E56BB6DDBCF7E011D6DB1F0535F5B4258C2520C59342DC36EFFCD5142CE278C64D', '2022-07-19 12:31:51', 'chen', 1, 0, '名侦探柯南');
 INSERT INTO network.mp4url (id, url, create_time, create_user, state, sisk, remark) VALUES (2, 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/byted-player-videos/1.0.0/xgplayer-demo.mp4', '2022-07-19 12:38:21', 'chen', 1, 0, '西瓜视频');
 INSERT INTO network.mp4url (id, url, create_time, create_user, state, sisk, remark) VALUES (3, 'http://vd3.bdstatic.com/mda-nad1xqh2ewjyn6wn/360p/h264_delogo/1642123652079019842/mda-nad1xqh2ewjyn6wn.mp4', '2022-07-19 12:42:24', 'chen', 1, 0, '烟');

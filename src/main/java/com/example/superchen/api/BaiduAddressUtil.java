@@ -37,6 +37,28 @@ public class BaiduAddressUtil {
         return address;
     }
 
+    /***
+     *
+     * 第三方接口获取
+     * @Author chen
+     * @Date  7:32
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
+    public String getAdd(String ip) {
+        String address = "";
+        try {
+            JSONObject resultJson = readJsonFromUrl("http://whois.pconline.com.cn/ipJson.jsp?ip="+ip+"json=true");
+            //resultJson 是返回结果，当前只取位置信息
+            address = ((JSONObject) resultJson.get("addr")).toJSONString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return address;
+    }
+
     /**
      * 读取
      *
