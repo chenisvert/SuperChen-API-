@@ -1,6 +1,5 @@
 package com.example.superchen.controller;
 
-import com.alibaba.druid.support.http.util.IPAddress;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.superchen.api.BaiduAddressUtil;
 import com.example.superchen.api.getText;
@@ -8,19 +7,15 @@ import com.example.superchen.domain.dom.IpAddress;
 import com.example.superchen.domain.dom.Url;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
-import com.example.superchen.service.IpAddressService;
 import com.example.superchen.utils.DateUtils;
 import com.example.superchen.utils.GenerateCodeUtils;
 import com.example.superchen.utils.IPUtil;
-import com.github.kevinsawicki.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,8 +24,8 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.example.superchen.common.RedisKey.KEY;
 import static com.example.superchen.common.RedisKey.TOKEN_KEY;
+import static com.example.superchen.domain.ro.ErrorCode.TOKEN_ERROR;
 
 /***
  * 开放 api
@@ -182,6 +177,7 @@ public class PubicApiController extends BaseController {
             String path = "/codeimages/";
             FileInputStream fileInputStream = new FileInputStream(new File(path + name + ".jpg"));
 
+
             //输出流，通过输出流将文件写回浏览器
             ServletOutputStream outputStream = response.getOutputStream();
 
@@ -194,6 +190,7 @@ public class PubicApiController extends BaseController {
                 outputStream.flush();
             }
 
+
             //关闭资源
             outputStream.close();
             fileInputStream.close();
@@ -204,8 +201,8 @@ public class PubicApiController extends BaseController {
     }
 
     @ResponseBody
-    @GetMapping("/downloadCode/{token}")
-    public ModelAndView getVideo(@PathVariable String token) throws IOException {
+    @GetMapping("/generateCode/{token}")
+    public ModelAndView generateCode(@PathVariable String token) throws IOException {
         log.info("入参  token：{}", token);
 //        Object tockens = this.redisTemplate.opsForValue().get("token");
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper();
@@ -213,7 +210,7 @@ public class PubicApiController extends BaseController {
         List<User> userList = this.userService.list(queryWrapper);
         System.out.println(userList);
         if (userList.size() != 0) {
-            Result result = this.pubicApiService.getImage(-1, token);
+            Result result = pubicApiService.getImage(-1, token);
             System.out.println(result.getMsg());
             //跳转
             response.sendRedirect((String) result.getMsg());
@@ -226,6 +223,7 @@ public class PubicApiController extends BaseController {
         return null;
 
     }
+
     /***
      *
      * 跳转视频
@@ -234,11 +232,12 @@ public class PubicApiController extends BaseController {
      * @Param
      * @Return
      * @Since version-11
+     * @return
 
      */
 
     @GetMapping("/getMyUserMp4/{token}")
-    public ModelAndView getMyUserMp4(@PathVariable String token) throws IOException {
+    public Result getMyUserMp4(@PathVariable String token) throws IOException {
 
         log.info("入参  token：{}", token);
 //        Object tockens = this.redisTemplate.opsForValue().get("token");
@@ -270,15 +269,15 @@ public class PubicApiController extends BaseController {
             return null;
         }
 
-        log.info("token 认证错误");
-        //跳转到认证失败的图片
-        response.sendRedirect("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2FdtcgBqxJpLJLLiaQBFAbyrkbG1jZqiasEn71RLC0PEjoOIArSx1LnNc5j3khj6a2ZfEE0HVnZ9ib1WCLI05RJ21Cw%2F0%3Fwx_fmt%3Dpng.jpg&refer=http%3A%2F%2Fmmbiz.qpic.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1661742790&t=c3dc9ac61144ec85c54e7367380fe033");
-        return null;
+        result.setCode(TOKEN_ERROR.getErrCode());
+        result.setMsg(TOKEN_ERROR.getErrMsg());
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
 
     }
 
     @GetMapping("/getText/{token}")
-    public Object getText( @PathVariable String token) throws IOException, InterruptedException {
+    public Result getText( @PathVariable String token) throws IOException, InterruptedException {
 
         log.info("入参  token：{}", token);
 //        Object tockens = this.redisTemplate.opsForValue().get("token");
@@ -295,9 +294,10 @@ public class PubicApiController extends BaseController {
         }
 
         log.info("token 认证错误");
-        //跳转到认证失败的图片
-        response.sendRedirect("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2FdtcgBqxJpLJLLiaQBFAbyrkbG1jZqiasEn71RLC0PEjoOIArSx1LnNc5j3khj6a2ZfEE0HVnZ9ib1WCLI05RJ21Cw%2F0%3Fwx_fmt%3Dpng.jpg&refer=http%3A%2F%2Fmmbiz.qpic.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1661742790&t=c3dc9ac61144ec85c54e7367380fe033");
-        return null;
+        result.setCode(TOKEN_ERROR.getErrCode());
+        result.setMsg(TOKEN_ERROR.getErrMsg());
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
 
     }
 
@@ -312,13 +312,12 @@ public class PubicApiController extends BaseController {
 
      */
     @GetMapping("/getAddress/{token}")
-    public Object getWz(@PathVariable String token ) throws IOException {
+    public Object getWz(@PathVariable String token ) {
         BaiduAddressUtil baiduAddressUtil = new BaiduAddressUtil();
         IpAddress addresssIp = new IpAddress();
         int timeOut = Integer.parseInt(RandomStringUtils.randomNumeric(2));
         String ipAddr = IPUtil.getIpAddr(request);
         log.info("入参  token：{}", token);
-//        Object tockens = this.redisTemplate.opsForValue().get("token");
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper();
         LambdaQueryWrapper<IpAddress> queryWrapperip = new LambdaQueryWrapper();
         queryWrapper.eq(User::getToken,token);
@@ -328,6 +327,7 @@ public class PubicApiController extends BaseController {
             log.info("认证成功！");
             //加入缓存
             String addressCaChe = (String) redisTemplate.opsForValue().get(ipAddr);
+            //第一层（缓存查询返回）
             if (addressCaChe != null){
                 log.info("命中缓存：getAddress");
                 result.setCode(200);
@@ -339,6 +339,7 @@ public class PubicApiController extends BaseController {
 
             queryWrapperip.eq(IpAddress::getIp,ipAddr);
             List<IpAddress> list = ipAddressService.list(queryWrapperip);
+            //第二层（ip数据库查询返回）
             if (!list.isEmpty()){
                 //数据库查到了
                 log.info("ip数据库命中！");
@@ -347,6 +348,8 @@ public class PubicApiController extends BaseController {
                     addresssIp.setAddress(item.getAddress());
                     return addresssIp;
                 }).collect(Collectors.toList());
+                //查到数据库放入缓存
+                redisTemplate.opsForValue().set(ipAddr,addresssIp.getAddress(),timeOut,TimeUnit.HOURS);
                 result.setCode(200);
                 result.setMsg(addresssIp.getAddress());
                 result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
@@ -354,8 +357,9 @@ public class PubicApiController extends BaseController {
             }
 
             log.info(ipAddr);
-
-            String address = baiduAddressUtil.getAddress(ipAddr);
+            //第三层（第三方接口返回）
+            String address = baiduAddressUtil.getThirdAddress(ipAddr);
+            System.out.println(address);
 
             //新ip 放入ip数据库
             addresssIp.setIp(ipAddr);
@@ -363,14 +367,16 @@ public class PubicApiController extends BaseController {
             ipAddressService.save(addresssIp);
             result.setCode(200);
             result.setMsg(address);
+            //新地址缓存
+            redisTemplate.opsForValue().set(ipAddr,address,timeOut,TimeUnit.HOURS);
             result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
             return result;
         }
 
-        log.info("token 认证错误");
-        //跳转到认证失败的图片
-        response.sendRedirect("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2FdtcgBqxJpLJLLiaQBFAbyrkbG1jZqiasEn71RLC0PEjoOIArSx1LnNc5j3khj6a2ZfEE0HVnZ9ib1WCLI05RJ21Cw%2F0%3Fwx_fmt%3Dpng.jpg&refer=http%3A%2F%2Fmmbiz.qpic.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1661742790&t=c3dc9ac61144ec85c54e7367380fe033");
-        return null;
+        result.setCode(TOKEN_ERROR.getErrCode());
+        result.setMsg(TOKEN_ERROR.getErrMsg());
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
 
     }
 

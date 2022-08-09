@@ -3,6 +3,7 @@ package com.example.superchen.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.superchen.api.ImagesApi;
 import com.example.superchen.api.MusicApi;
+import com.example.superchen.api.getText;
 import com.example.superchen.domain.dom.Url;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
@@ -101,14 +102,29 @@ public class ApiController extends BaseController {
         return result;
     }
     //获取音乐
-    @PostMapping("/getMusic")
-    public Result getMusic(@RequestBody String name) {
-        log.info(name);
-        String url = new MusicApi().GetMusic(name);
-        result.setCode(200);
+    @PostMapping("/getMusic/{token}")
+    public Result getMusic(@RequestBody String name,@PathVariable String token) {
+
+        log.info("入参  token：{}", token);
+//        Object tockens = this.redisTemplate.opsForValue().get("token");
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(User::getToken,token);
+        List<User> userList = userService.list(queryWrapper);
+        System.out.println(userList);
+        if (userList.size() != 0) {
+            log.info(name);
+            String url = new MusicApi().GetMusic(name);
+            result.setCode(200);
+            result.setDate(DateUtils.getDate(" yyyy-MM-dd HH:mm:ss HH:mm:ss"));
+            result.setMsg(url);
+            return result;
+        }
+
+        result.setCode(403);
+        result.setMsg("token认证错误");
         result.setDate(DateUtils.getDate(" yyyy-MM-dd HH:mm:ss HH:mm:ss"));
-        result.setMsg(url);
         return result;
+
     }
 
 

@@ -72,8 +72,10 @@
     </div>
     </div>
 
-    <script src="../../js/jquery-3.3.1.js"></script>
-    <script src="../../layer/layer.js"></script>
+<script src="../../js/jquery-3.3.1.js"></script>
+<script src="../../layer/layer.js"></script>
+<script src="../../js/popMessage.js"></script>
+
     <script>
         //判断是否已经登录过了
         $.ajax({
@@ -120,17 +122,20 @@
                         layer.msg(data.msg)
                         //登录成功跳转后台
                         if (data.code === 200){
-                            layer.msg(data.msg)
+                            layer.msg("登录成功，请稍等")
                             window.location.replace("/user/gomain");
+                        }else {
+                            //登录失败
+                            layer.msg(data.msg)
+                            //登录失败重新验证
+                            cleanMsg()
                         }
-                        //登录失败重新验证
-                        cleanMsg()
                     },
 
                     error: function (e)//服务器响应失败处理函数
                     {
                         //登录失败重新验证
-                        alert("发生错误,错误码:"+e.status);
+                        Message.error("发生错误,错误码:"+e.status);
                         document.getElementById('msg').innerHTML = ''
                         console.log(e.message)
                     }

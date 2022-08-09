@@ -1,7 +1,10 @@
 package com.example.superchen.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +40,7 @@ public class BaiduAddressUtil {
         return address;
     }
 
+
     /***
      *
      * 第三方接口获取
@@ -47,12 +51,46 @@ public class BaiduAddressUtil {
      * @Since version-11
 
      */
-    public String getAdd(String ip) {
+    /*
+    *
+    * {
+  "status": "0",
+  "t": "",
+  "set_cache_time": "",
+  "data": [
+    {
+      "ExtendedLocation": "",
+      "OriginQuery": "47.106.67.99",
+      "appinfo": "",
+      "disp_type": 0,
+      "fetchkey": "47.106.67.99",
+      "location": "广东省深圳市 阿里云",
+      "origip": "47.106.67.99",
+      "origipquery": "47.106.67.99",
+      "resourceid": "6006",
+      "role_id": 0,
+      "shareImage": 1,
+      "showLikeShare": 1,
+      "showlamp": "1",
+      "titlecont": "IP地址查询",
+      "tplt": "ip"
+    }
+  ]
+}
+    * */
+    public String getThirdAddress(String ip) {
         String address = "";
         try {
-            JSONObject resultJson = readJsonFromUrl("http://whois.pconline.com.cn/ipJson.jsp?ip="+ip+"json=true");
+            JSONObject resultJson = readJsonFromUrl("http://opendata.baidu.com/api.php?query="+ip+"&co=&resource_id=6006&oe=utf8");
             //resultJson 是返回结果，当前只取位置信息
-            address = ((JSONObject) resultJson.get("addr")).toJSONString();
+
+//            address = ((JSONObject) resultJson.get("data")).getString("location");
+            JSONArray jsonArray = resultJson.getJSONArray("data");
+
+            for (int i = 0; i < jsonArray.size() ; i++) {
+                JSONObject ob = (JSONObject) jsonArray.get(i);//得到json对象
+                address = ob.getString("location");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

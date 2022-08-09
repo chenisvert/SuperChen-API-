@@ -4,10 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.BufferedReader;
@@ -16,26 +12,34 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.Iterator;
 
 @SpringBootTest
 class SuperChenNetworkApplicationTests {
     public static void main(String[] args) {
         String address = getAddress();
-        System.out.println(address);
     }
+
 
     public static String getAddress() {
         String address = "";
 
         try {
-            JSONObject resultJson = readJsonFromUrl("https://api.txqq.pro/api/Music.php?port=网易&msg=孤勇者&b=1");
-            address = ((JSONObject) resultJson.get("data")).getString("music");
-//            // Json字符串转换成JsonNode对象
+            JSONObject resultJson = readJsonFromUrl("http://opendata.baidu.com/api.php?query=47.106.67.99&co=&resource_id=6006&oe=utf8");
+            //resultJson 是返回结果，当前只取位置信息
+
+//            address = ((JSONObject) resultJson.get("data")).getString("location");
+            JSONArray jsonArray = resultJson.getJSONArray("data");
+            System.out.println(jsonArray);
+            for (int i = 0; i < jsonArray.size() ; i++) {
+                JSONObject ob = (JSONObject) jsonArray.get(i);//得到json对象
+                System.out.println(ob.getString("location"));
+            }
+
+
+            // Json字符串转换成JsonNode对象
 //            ObjectMapper mapper = new ObjectMapper();
 //            JsonNode jsonNode = mapper.readTree(address);
-//            address = String.valueOf(jsonNode.findValue("playUrl"));
+//            address = String.valueOf(jsonNode.findValue("location"));
 
         } catch (Exception e) {
             e.printStackTrace();

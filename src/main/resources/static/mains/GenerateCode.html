@@ -5,36 +5,44 @@
     <title>二维码</title>
 </head>
 <body>
-网址：<input type="url" id="url" >
+内容：<input type="url" id="url" >
 <input type="button" onclick="getCode()" value="生成">
 <div id="dirImg"></div>
 
 <script src="../js/jquery-3.3.1.js"></script>
 <script src="../layer/layer.js"></script>
+<script src="../js/popMessage.js"></script>
 <script>
      function getCode() {
          let url = document.getElementById("url").value;
-        $.ajax({
-            url: "/apis/generateCode/"+url+"/1218e18ccb609c468d2331ecc663544e",
-            type: "get",
-            dataType: "json",
-            contentType: "application/json",
-            beforeSend: function (xhr) {
-                layer.load(2, {time: 100*1000}); //又换了种风格，并且设定最长等待100秒
-            },
-            success: function (data) {
-                //请求频繁
-                if (data.code === 403){
-                    //关闭加载层
-                    layer.closeAll('loading');
-                    layer.msg(data.msg)
-                }
 
-                window.location.href = "http://47.106.67.99/apis/downloadCode/"+data.msg
+         if (url === "") {
+             Message.error("请输入内容")
+             return false;
+         } else {
+             //发请求
+             $.ajax({
+                 url: "/apis/generateCode/" + url + "/1218e18ccb609c468d2331ecc663544e",
+                 type: "get",
+                 dataType: "json",
+                 contentType: "application/json",
+                 beforeSend: function (xhr) {
+                     layer.load(2, {time: 100 * 1000}); //又换了种风格，并且设定最长等待100秒
+                 },
+                 success: function (data) {
+                     //请求频繁
+                     if (data.code === 403) {
+                         //关闭加载层
+                         layer.closeAll('loading');
+                         layer.msg(data.msg)
+                     }
 
-            }
-        })
-    }
+                     window.location.href = "http://47.106.67.99/apis/downloadCode/" + data.msg
+
+                 }
+             })
+         }
+     }
 
 </script>
 </body>

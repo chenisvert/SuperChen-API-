@@ -11,6 +11,7 @@ import com.example.superchen.domain.dom.Url;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
 import com.example.superchen.utils.DateUtils;
+import com.example.superchen.utils.JwtUtils;
 import com.example.superchen.utils.MD5Util;
 import com.example.superchen.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,8 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.example.superchen.common.RedisKey.TOKEN_KEY;
-import static com.example.superchen.common.RedisKey.USER_KET;
+import static com.example.superchen.common.RedisKey.*;
+import static com.example.superchen.domain.ro.ErrorCode.LOGIN_ERROR;
 
 @Slf4j
 @Controller
@@ -113,15 +114,20 @@ public class UserController extends BaseController {
 //            userService.updateTime(user);
             //放入ThreadLocal
             BaseContext.setCurrentId(user.getId());
+            //生成token
+            JwtUtils jwtUtils = new JwtUtils();
+            String jwtToken = jwtUtils.getJwtToken(user.getId(), user.getUsername());
+            //token放入redis
+            redisTemplate.opsForValue().set(JWTTOKEN_KEY,jwtToken,12,TimeUnit.HOURS);
             //设置返回
             result.setCode(200);
-            result.setMsg("登陆成功！，正在跳转请稍等");
+            result.setMsg(jwtToken);
             result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
             return result;
         }
         //登陆失败
-        result.setCode(403);
-        result.setMsg("用户名或密码错误！");
+        result.setCode(LOGIN_ERROR.getErrCode());
+        result.setMsg(LOGIN_ERROR.getErrMsg());
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         return result;
     }
@@ -201,7 +207,7 @@ public class UserController extends BaseController {
     * */
     @ResponseBody
     @PostMapping("/geToken")
-    public Result gettoken() {
+    public Result geToken() {
         //获取登录的用户名
         User users = (User) session.getAttribute("login");
         String username = users.getUsername();
