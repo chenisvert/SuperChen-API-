@@ -55,6 +55,8 @@ public class BaseController {
     protected PubicApiService pubicApiService;
     @Resource
     protected IpAddressService ipAddressService;
+    @Resource
+    protected AccessService accessService;
 
 
 

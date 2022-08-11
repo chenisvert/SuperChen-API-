@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
+    <title>开通访问统计服务</title>
+
+    <style>
+        body{
+            background: url("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg9.51tietu.net%2Fpic%2F2019-091405%2Fbzv2vtafxpjbzv2vtafxpj.jpg&refer=http%3A%2F%2Fimg9.51tietu.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662800235&t=9263737e2886679a064033475c77a424");
+        }
+
+        #open{
+            width: 80px;
+            height: 40px;
+            background:  #5cb85c;
+            border: 1px pink solid;
+            color: #fff;
+            transition: 0.3s ease;
+            cursor: pointer;
+            opacity: 0.5;
+            margin-left: 50%;
+            margin-top: 200px;
+        }
+
+        #open:hover{
+            transform: scale(1.25);
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script src="../js/popMessage.js"></script>
+
+<input type="button" id="open" onclick="openService()" value="开通" style="text-align: center">
+<script>
+
+
+    function openService(){
+        $.ajax({
+            url: "/user/openAccess",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            // data: JSON.stringify({"name":musicName}),
+            beforeSend: function (xhr) {
+                layer.msg("开通中。。。", {icon: 16})
+            },
+            success: function (data) {
+                //请求成功
+                if (data.code === 200) {
+                    Message.success(data.msg);
+                }else {
+                    layer.msg(data.msg)
+                }
+
+            }
+        })
+    }
+</script>
+</body>
+</html>

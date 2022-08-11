@@ -40,7 +40,7 @@ import static com.example.superchen.domain.ro.ErrorCode.TOKEN_ERROR;
 @Slf4j
 @RestController
 @RequestMapping("/apis")
-public class PubicApiController extends BaseController {
+public class PublicApiController extends BaseController {
 
 
     private Result result = new Result<>();

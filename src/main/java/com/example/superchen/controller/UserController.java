@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.superchen.common.BaseContext;
 import com.example.superchen.common.UserException;
+import com.example.superchen.domain.dom.Access;
 import com.example.superchen.domain.dom.Url;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
@@ -94,7 +95,7 @@ public class UserController extends BaseController {
 
             //登录成功
             //根据前端传入的用户名，查询对应
-            queryWrapper.select(User::getEmail, User::getPermission, User::getId, User::getCreateTime, User::getUsername);
+            queryWrapper.select(User::getEmail, User::getPermission, User::getId, User::getCreateTime, User::getUsername,User::getToken);
             List<User> list = userService.list(queryWrapper);
             //遍历集合
             list.stream().map((item) -> {
@@ -103,6 +104,7 @@ public class UserController extends BaseController {
                 user.setPermission(item.getPermission());
                 user.setId(item.getId());
                 user.setCreateTime(item.getCreateTime());
+                user.setToken(item.getToken());
                 return user;
             }).collect(Collectors.toList());
             //将前端的参数绑定上
@@ -341,17 +343,49 @@ public class UserController extends BaseController {
         return "admin/diruser";
     }
 
-    //测试阶段的方法，线上请删除
-//    @ResponseBody
-//    @GetMapping("/root")
-//    public  String a() throws IOException {
-//        User user = new User();
-//        user.setUsername("chen");
-//        user.setPermission("admin");
-//        session.setAttribute("login",user);
-//        return "success!";
-//    }
+    /***
+     * 开通访问量服务
+     * @Author chen
+     * @Date 23:37
+     * @Param
+     * @Return
+     * @Since version-11
 
+     */
+    @ResponseBody
+    @PostMapping("/openAccess")
+    public Result openAccess() {
+
+        User user = (User) session.getAttribute("login");
+
+        LambdaQueryWrapper<User> queryWrapperUser = new LambdaQueryWrapper<>();
+        Access access = new Access();
+        //绑定session中的token
+        access.setToken(user.getUsername());
+        queryWrapperUser.eq(User::getToken,user.getUsername());
+        List<User> listUser = userService.list(queryWrapperUser);
+
+        LambdaQueryWrapper<Access> queryWrapperAccess = new LambdaQueryWrapper<>();
+        queryWrapperAccess.eq(Access::getToken,user.getToken());
+
+        log.info(user.getUsername());
+
+        List<Access> list = accessService.list(queryWrapperAccess);
+        access.setToken(user.getToken());
+        if (list.size() != 0){
+            result.setCode(400);
+            result.setMsg("您已经开通了，请勿重复开通");
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        System.out.println(access);
+        accessService.save(access);
+        result.setCode(200);
+        result.setMsg("开通成功");
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+
+    }
 
 
 }

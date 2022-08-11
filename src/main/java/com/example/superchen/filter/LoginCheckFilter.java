@@ -54,6 +54,7 @@ public class LoginCheckFilter implements Filter{
                 "/sendUrls/**",
                 "/api/**",
                 "/apis/**",
+                "/apisTwo/**",
                 "/mains/**"
 
 
