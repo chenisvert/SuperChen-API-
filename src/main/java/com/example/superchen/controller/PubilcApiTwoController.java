@@ -42,7 +42,7 @@ public class PubilcApiTwoController extends BaseController {
 
      */
     @ResponseBody
-    @GetMapping("/setCount/{token}")
+    @GetMapping("/setAccessCount/{token}")
     public Result Imgurl(@PathVariable String token) {
         log.info("入参 ,token：{}", token);
 

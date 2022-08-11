@@ -1,3 +1,16 @@
+create table access
+(
+    id          int auto_increment
+        primary key,
+    count       int        default 0      not null,
+    warning     tinyint(1) default 0      not null,
+    create_time datetime                  not null,
+    threshold   int        default 100000 null,
+    token       varchar(500)              not null,
+    constraint access_id_uindex
+        unique (id)
+);
+
 create table imagesurl
 (
     id          int auto_increment

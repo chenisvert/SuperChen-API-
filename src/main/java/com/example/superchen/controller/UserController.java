@@ -96,6 +96,7 @@ public class UserController extends BaseController {
             //登录成功
             //根据前端传入的用户名，查询对应
             queryWrapper.select(User::getEmail, User::getPermission, User::getId, User::getCreateTime, User::getUsername,User::getToken);
+            queryWrapper.eq(User::getUsername,admin.getUsername());
             List<User> list = userService.list(queryWrapper);
             //遍历集合
             list.stream().map((item) -> {
