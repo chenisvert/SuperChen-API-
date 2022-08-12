@@ -39,47 +39,27 @@
 <script src="../js/jquery-3.3.1.js"></script>
 <script src="../layer/layer.js"></script>
 <script src="../js/popMessage.js"></script>
-<span id="dirAccess" style="margin-left: 50%;margin-top: 100px;"></span>
-<input type="button" id="open" onclick="openService()" value="开通" style="text-align: center">
+<!--访问量显示-->
+<div id="accessDir">
+    当前访问量:<span id="dirAccess" ></span>
+</div>
+<input type="button" id="open" onclick="openService()" value="开通" style="text-align: center"><br><br>
+
 <br>
 <br>
-<input type="button" id="reset" onclick="resetAccess()" value="清空访问量" style="text-align: center">
+<input type="button" id="reset" onclick="resetAccess()" value="清空访问量" style="margin-left: 50%">
+<br><br>
+<a href="../mains/mainAccessConfigure.html">控制台</a>
 <script>
     //页面刷新
     window.onload = function (){
-        $.ajax({
-            url: "/access/checkAccess",
-            type: "post",
-            dataType: "json",
-            contentType: "application/json",
-            success: function (data) {
-                //请求成功
-                if (data.code === 200) {
-                    document.getElementById("dirAccess").innerHTML = data.msg;
-                }
-                document.getElementById("dirAccess").innerHTML = data.msg;
-
-
-            }
-        })
+        checkAccess()
     }
-    //定时更新访问
-    var t2 = window.setInterval(function() {
 
-            $.ajax({
-                url: "/access/checkAccess",
-                type: "post",
-                dataType: "json",
-                contentType: "application/json",
-                success: function (data) {
-                    //请求成功
-                    if (data.code === 200) {
-                       document.getElementById("dirAccess").innerHTML = data.msg;
-                    }
-                        document.getElementById("dirAccess").innerHTML = data.msg;
-                }
-            })
 
+    //定时更新访问,获取实时数据
+    let t2 = window.setInterval(function() {
+            checkAccess()
     },3000)
 
 
@@ -112,8 +92,7 @@
     //清空访问量
 
     function resetAccess(){
-
-           var msg = "您真的确定要清空吗？\n\n请确认！";
+           let msg = "您真的确定要清空吗？\n\n请确认！";
              if (confirm(msg) === true){
                  $.ajax({
                      url: "/access/resetAccess",
@@ -131,9 +110,26 @@
                      }
                  })
              }
-
-
     }
+    //获取访问量
+    function checkAccess(){
+        $.ajax({
+            url: "/access/checkAccess",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                //请求成功
+                if (data.code === 200) {
+                    document.getElementById("dirAccess").innerHTML = data.msg;
+                }
+                document.getElementById("dirAccess").innerHTML = data.msg;
+
+
+            }
+        })
+    }
+
 </script>
 </body>
 </html>

@@ -43,14 +43,13 @@ public class PubilcApiTwoController extends BaseController {
      */
     @ResponseBody
     @GetMapping("/setAccessCount/{token}")
-    public Result Imgurl(@PathVariable String token) {
+    public Result setAccessCount(@PathVariable String token) {
         log.info("入参 ,token：{}", token);
 
         Access access = new Access();
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getToken, token);
         List<User> userList = userService.list(queryWrapper);
-
 
 
         LambdaQueryWrapper<Access> queryWrapperAccess = new LambdaQueryWrapper<>();

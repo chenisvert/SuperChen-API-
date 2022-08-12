@@ -7,12 +7,11 @@ import com.example.superchen.domain.ro.Result;
 import com.example.superchen.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.superchen.domain.ro.ErrorCode.PARAMS_ERROR;
 import static com.example.superchen.domain.ro.ErrorCode.SERVICE_ERROR;
 
 @Controller
@@ -54,9 +53,7 @@ public class AccessController  extends BaseController{
         for (Access access1:list) {
             access.setId(access1.getId());
         }
-
         access.setCount(0);
-
         accessService.updateById(access);
 
         result.setCode(200);
@@ -83,16 +80,10 @@ public class AccessController  extends BaseController{
             result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
             return result;
         }
-
-
-
-
-
         List<Access> list1 = accessService.list(queryWrapperAccess);
         for (Access access1:list) {
             access.setCount(access1.getCount());
         }
-
         result.setCode(200);
         result.setMsg(access.getCount());
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
@@ -100,5 +91,78 @@ public class AccessController  extends BaseController{
 
     }
 
+    /***
+     * 获取登录用户的预警阈值
+     * @Author chen
+     * @Date  17:06
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
+    @ResponseBody
+    @PostMapping("/checkThreshold")
+    public Result checkThreshold() {
+
+        User user = (User) session.getAttribute("login");
+        Access access = new Access();
+
+        LambdaQueryWrapper<Access> queryWrapperAccess = new LambdaQueryWrapper<>();
+        queryWrapperAccess.eq(Access::getToken,user.getToken());
+        List<Access> list = accessService.list(queryWrapperAccess);
+        //服务未开通
+        if (list.isEmpty()){
+            result.setCode(SERVICE_ERROR.getErrCode());
+            result.setMsg(SERVICE_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        for (Access access1:list) {
+            access.setThreshold(access1.getThreshold());
+        }
+        result.setCode(200);
+        result.setMsg(access.getThreshold());
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
 
     }
+
+    @ResponseBody
+    @PostMapping("/upDataThreshold")
+    public Result upDataThreshold(@RequestBody Access accessOn) {
+
+        User user = (User) session.getAttribute("login");
+        Access access = new Access();
+
+        LambdaQueryWrapper<Access> queryWrapperAccess = new LambdaQueryWrapper<>();
+        queryWrapperAccess.eq(Access::getToken,user.getToken());
+        List<Access> list = accessService.list(queryWrapperAccess);
+        //服务未开通
+        if (list.isEmpty()){
+            result.setCode(SERVICE_ERROR.getErrCode());
+            result.setMsg(SERVICE_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        for (Access access1:list) {
+            access.setCount(access1.getCount());
+        }
+        if (access.getCount() > accessOn.getThreshold()){
+            result.setCode(PARAMS_ERROR.getErrCode());
+            result.setMsg(PARAMS_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        access.setId(user.getId());
+        access.setThreshold(accessOn.getThreshold());
+        accessService.updateById(access);
+
+        result.setCode(200);
+        result.setMsg("修改成功");
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+
+    }
+
+
+}

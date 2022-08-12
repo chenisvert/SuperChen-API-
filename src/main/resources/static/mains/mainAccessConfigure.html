@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>访问主要配置</title>
+</head>
+<body>
+
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script src="../js/popMessage.js"></script>
+
+当前阈值：<span id="dir"></span>
+<div class="upDataThreshold" style="margin-left: 40%">
+    预警阈值：<input type="text" id="t1" required >
+    <input type="button"  onclick="upDataThreshold()" value="修改">
+</div>
+
+<script>
+    window.onload = function () {
+        checkThreshold()
+    }
+
+    //获取预警阈值
+    function checkThreshold() {
+        $.ajax({
+            url: "/access/checkThreshold",
+            type: "post",
+            dataType: "json",
+            async: false,
+            contentType: "application/json",
+            success: function (data) {
+                //请求成功
+                if (data.code === 200) {
+                    document.getElementById("dir").innerHTML = data.msg
+                } else {
+                    layer.msg(data.msg)
+                }
+
+            }
+        })
+    }
+
+
+    //修改预警阈值
+    function upDataThreshold(){
+        let threshold  = document.getElementById("t1").value
+        //获取预警阈值
+            $.ajax({
+                url: "/access/upDataThreshold",
+                type: "post",
+                dataType: "json",
+                data:JSON.stringify({"threshold":threshold}),
+                contentType: "application/json",
+                success: function (data) {
+                    //请求成功
+                    if (data.code === 200) {
+                        layer.msg(data.msg)
+                        //更新页面数据
+                        checkThreshold()
+                    }
+                    layer.msg(data.msg)
+                }
+            })
+
+    }
+</script>
+</body>
+</html>

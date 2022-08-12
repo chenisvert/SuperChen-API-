@@ -57,8 +57,6 @@ public class UserController extends BaseController {
                 log.info("/user/gomin 检测到未登录");
                 response.sendRedirect("../files/login/login.html");
             }
-
-
             LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
             //根据User::getUsername 去查getPermission
             queryWrapper.eq(User::getUsername, users.getUsername());
