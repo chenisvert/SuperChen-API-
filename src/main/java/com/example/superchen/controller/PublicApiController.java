@@ -63,14 +63,12 @@ public class PublicApiController extends BaseController {
         queryWrapper.eq(User::getToken, token);
         List<User> userList = userService.list(queryWrapper);
         System.out.println(userList);
-
         //认证临时token
         if (token.equals(tockens)) {
             log.info("临时token: {}", tockens);
             Result result = pubicApiService.getImage(id, token);
             return result;
         }
-
         //认证token
         if (userList.size() != 0) {
             Result result = pubicApiService.getImage(id, token);
@@ -81,8 +79,6 @@ public class PublicApiController extends BaseController {
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         result.setMsg("token 认证错误");
         return result;
-
-
     }
 
     /***
@@ -111,7 +107,6 @@ public class PublicApiController extends BaseController {
             response.sendRedirect((String) result.getMsg());
             return null;
         }
-
         log.info("token 认证错误");
         //跳转到认证失败的图片
         response.sendRedirect("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2FdtcgBqxJpLJLLiaQBFAbyrkbG1jZqiasEn71RLC0PEjoOIArSx1LnNc5j3khj6a2ZfEE0HVnZ9ib1WCLI05RJ21Cw%2F0%3Fwx_fmt%3Dpng.jpg&refer=http%3A%2F%2Fmmbiz.qpic.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1661742790&t=c3dc9ac61144ec85c54e7367380fe033");
@@ -149,7 +144,6 @@ public class PublicApiController extends BaseController {
             }
 
         }
-
         result.setCode(403);
         result.setMsg("token错误！");
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
@@ -171,7 +165,6 @@ public class PublicApiController extends BaseController {
     @ResponseBody
     @GetMapping("/downloadCode/{name}")
     public void download(@PathVariable String name) {
-
         try {
             //输入流，通过输入流读取文件内容
             String path = "/codeimages/";
@@ -189,8 +182,6 @@ public class PublicApiController extends BaseController {
                 outputStream.write(bytes, 0, len);
                 outputStream.flush();
             }
-
-
             //关闭资源
             outputStream.close();
             fileInputStream.close();
@@ -216,7 +207,6 @@ public class PublicApiController extends BaseController {
             response.sendRedirect((String) result.getMsg());
             return null;
         }
-
         log.info("token 认证错误");
         //跳转到认证失败的图片
         response.sendRedirect("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2FdtcgBqxJpLJLLiaQBFAbyrkbG1jZqiasEn71RLC0PEjoOIArSx1LnNc5j3khj6a2ZfEE0HVnZ9ib1WCLI05RJ21Cw%2F0%3Fwx_fmt%3Dpng.jpg&refer=http%3A%2F%2Fmmbiz.qpic.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1661742790&t=c3dc9ac61144ec85c54e7367380fe033");

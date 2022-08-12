@@ -128,6 +128,18 @@ public class AccessController  extends BaseController{
 
     }
 
+
+    /***
+     *
+     * 修改访问阈值
+     * @Author chen
+     * @Date  19:59
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
+
     @ResponseBody
     @PostMapping("/upDataThreshold")
     public Result upDataThreshold(@RequestBody Access accessOn) {

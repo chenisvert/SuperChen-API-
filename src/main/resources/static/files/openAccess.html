@@ -4,10 +4,29 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
+
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
     <title>开通访问统计服务</title>
 
     <style>
+        @media screen and (max-width: 600px) {
+            input[type='button'] {
+                margin: 10px;
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            input[type='button'] {
+                min-width: 100px;
+                min-height: 60px;
+                padding: 0 10px;
+                font-size: 20px;
+                font-weight: 100;
+                border-radius: 10px;
+            }
+        }
+
         html,
         body {
             height: 80vh;
@@ -21,13 +40,13 @@
         }
 
         input {
-            width: 200px;
-            height: 80px;
-            margin: 80px;
+            min-width: 200px;
+            min-height: 80px;
+            margin: 50px;
             color: #eee;
             font-size: 30px;
             font-weight: 500;
-            all: 0.4s ease-in-out;
+            transition: all 0.4s ease-in-out;
             border: 3px solid rgb(220, 233, 254, 0.7);
             border-radius: 25px;
             text-shadow: 1px 1px 0 #fff;
@@ -72,28 +91,25 @@
             opacity: 1;
         } */
     </style>
-
+    <link rel="stylesheet" href="./开通访问统计服务_files/layer.css" id="layui_layer_skinlayercss">
 </head>
-
-<body>
 <div id="accessDir" style="margin: 0 auto;position: absolute;left: 40%;top: 100px">
     当前访问量:<span id="dirAccess" ></span>
 </div>
 
-    <input type="button" id="open" onclick="openService()" value="开通" style="text-align: center"><br><br>
+<input type="button" id="open" onclick="openService()" value="开通" style="text-align: center"><br><br>
 
-    <br>
-    <br>
-    <input type="button" id="reset" onclick="resetAccess()" value="清空访问量" style="margin-left: 50%">
-    <br><br>
-    <a href="../mains/mainAccessConfigure.html" style="position: absolute;left: 50%">控制台</a>
+<br>
+<br>
+<input type="button" id="reset" onclick="resetAccess()" value="清空访问量" style="margin-left: 20%">
+<br><br>
+<a href="../mains/mainAccessConfigure.html" style="position: absolute;left: 50%">控制台</a>
 
 
 <script src="../js/jquery-3.3.1.js"></script>
 <script src="../layer/layer.js"></script>
 <script src="../js/popMessage.js"></script>
     <script>
-
         //页面刷新
         window.onload = function (){
             checkAccess()
@@ -115,14 +131,14 @@
                 contentType: "application/json",
                 // data: JSON.stringify({"name":musicName}),
                 beforeSend: function (xhr) {
-                    layer.msg("开通中。。。", {icon: 16})
+                    Message.success("开通中...");
                 },
                 success: function (data) {
                     //请求成功
                     if (data.code === 200) {
                         Message.success(data.msg);
                     }else {
-                        layer.msg(data.msg)
+                        Message.error(data.msg);
                     }
 
                 }
@@ -175,7 +191,8 @@
 
     </script>
 
-
+    <script src="chrome-extension://elodjeafmgeffameomdchmbjolhopbhb/static/js/inject.js" type="text/javascript"
+        async=""></script>
 </body>
 
 </html>

@@ -32,23 +32,16 @@ public class BaseController {
 
     @Resource
     protected RedisTemplate redisTemplate;
-
-
     @Resource
     protected RequestService requestService;
-
     @Resource
     protected UserService userService;
-
     @Resource
     protected UrlService urlService;
-
     @Resource
     protected Mp4Api mp4Api;
-
     @Resource
     protected ImagesUrlService imagesUrlService;
-
     @Resource
     protected VipvideoService vipvideoService;
     @Resource
@@ -57,12 +50,6 @@ public class BaseController {
     protected IpAddressService ipAddressService;
     @Resource
     protected AccessService accessService;
-
-
-
-
-
-
 
 
 

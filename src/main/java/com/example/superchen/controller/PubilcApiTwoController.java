@@ -51,7 +51,6 @@ public class PubilcApiTwoController extends BaseController {
         queryWrapper.eq(User::getToken, token);
         List<User> userList = userService.list(queryWrapper);
 
-
         LambdaQueryWrapper<Access> queryWrapperAccess = new LambdaQueryWrapper<>();
         queryWrapperAccess.eq(Access::getToken,token);
         List<Access> listAccess = accessService.list(queryWrapperAccess);
@@ -70,7 +69,6 @@ public class PubilcApiTwoController extends BaseController {
             result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
             return result;
         }
-
         List<Access> list = accessService.list(queryWrapperAccess);
         list.stream().map((item) ->{
             access.setId(item.getId());
@@ -80,7 +78,6 @@ public class PubilcApiTwoController extends BaseController {
             access.setToken(item.getToken());
             return access;
         }).collect(Collectors.toList());
-
 
         int count = access.getCount()+1;
         access.setCount(count);
