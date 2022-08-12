@@ -1,19 +1,60 @@
 <!DOCTYPE html>
+<!-- saved from url=(0043)http://localhost:8080/files/openAccess.html -->
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
     <title>开通访问统计服务</title>
 
     <style>
-        body{
-            background: url("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg9.51tietu.net%2Fpic%2F2019-091405%2Fbzv2vtafxpjbzv2vtafxpj.jpg&refer=http%3A%2F%2Fimg9.51tietu.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662800235&t=9263737e2886679a064033475c77a424");
+        html,
+        body {
+            height: 80vh;
         }
 
-        #open{
+        body {
+            display: flex;
+            background: url("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg9.51tietu.net%2Fpic%2F2019-091405%2Fbzv2vtafxpjbzv2vtafxpj.jpg&refer=http%3A%2F%2Fimg9.51tietu.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662800235&t=9263737e2886679a064033475c77a424");
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        input {
+            width: 200px;
+            height: 80px;
+            margin: 80px;
+            color: #eee;
+            font-size: 30px;
+            font-weight: 500;
+            all: 0.4s ease-in-out;
+            border: 3px solid rgb(220, 233, 254, 0.7);
+            border-radius: 25px;
+            text-shadow: 1px 1px 0 #fff;
+            box-shadow: 9px 9px 16px 0px rgb(163 177 198 / 40%), -9px -9px 16px 0px rgb(255 255 255 / 80%);
+        }
+
+        input:hover {
+            box-shadow: 5px 5px 10px 0px rgb(163 177 198 / 60%), -5px -5px 10px 0px rgb(255 255 255);
+            text-shadow: 1px 1px 10px #fff;
+        }
+
+        input:nth-of-type(1) {
+            background-color: rgba(0, 0, 255, 0.8);
+        }
+
+        input:nth-of-type(2) {
+            background-color: rgba(255, 0, 0, 0.8);
+        }
+
+        ::selection {
+            display: none;
+        }
+
+        /* #open {
             width: 80px;
             height: 40px;
-            background:  #5cb85c;
+            background: #5cb85c;
             border: 1px pink solid;
             color: #fff;
             transition: 0.3s ease;
@@ -21,115 +62,120 @@
             opacity: 0.5;
             margin-left: 50%;
             margin-top: 200px;
-        }
+        } */
 
-        #open:hover{
+        /* #open:hover {
             transform: scale(1.25);
             border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
             opacity: 1;
-        }
+        } */
     </style>
-</head>
-<body>
 
+</head>
+
+<body>
+<div id="accessDir" style="margin: 0 auto;position: absolute;left: 40%;top: 100px">
+    当前访问量:<span id="dirAccess" ></span>
+</div>
+
+    <input type="button" id="open" onclick="openService()" value="开通" style="text-align: center"><br><br>
+
+    <br>
+    <br>
+    <input type="button" id="reset" onclick="resetAccess()" value="清空访问量" style="margin-left: 50%">
+    <br><br>
+    <a href="../mains/mainAccessConfigure.html" style="position: absolute;left: 50%">控制台</a>
 
 
 <script src="../js/jquery-3.3.1.js"></script>
 <script src="../layer/layer.js"></script>
 <script src="../js/popMessage.js"></script>
-<!--访问量显示-->
-<div id="accessDir">
-    当前访问量:<span id="dirAccess" ></span>
-</div>
-<input type="button" id="open" onclick="openService()" value="开通" style="text-align: center"><br><br>
+    <script>
 
-<br>
-<br>
-<input type="button" id="reset" onclick="resetAccess()" value="清空访问量" style="margin-left: 50%">
-<br><br>
-<a href="../mains/mainAccessConfigure.html">控制台</a>
-<script>
-    //页面刷新
-    window.onload = function (){
-        checkAccess()
-    }
-
-
-    //定时更新访问,获取实时数据
-    let t2 = window.setInterval(function() {
+        //页面刷新
+        window.onload = function (){
             checkAccess()
-    },3000)
+        }
+
+
+        //定时更新访问,获取实时数据
+        let t2 = window.setInterval(function() {
+            checkAccess()
+        },3000)
 
 
 
-    function openService(){
-        $.ajax({
-            url: "/user/openAccess",
-            type: "post",
-            dataType: "json",
-            contentType: "application/json",
-            // data: JSON.stringify({"name":musicName}),
-            beforeSend: function (xhr) {
-                layer.msg("开通中。。。", {icon: 16})
-            },
-            success: function (data) {
-                //请求成功
-                if (data.code === 200) {
-                    Message.success(data.msg);
-                }else {
-                    layer.msg(data.msg)
+        function openService(){
+            $.ajax({
+                url: "/user/openAccess",
+                type: "post",
+                dataType: "json",
+                contentType: "application/json",
+                // data: JSON.stringify({"name":musicName}),
+                beforeSend: function (xhr) {
+                    layer.msg("开通中。。。", {icon: 16})
+                },
+                success: function (data) {
+                    //请求成功
+                    if (data.code === 200) {
+                        Message.success(data.msg);
+                    }else {
+                        layer.msg(data.msg)
+                    }
+
                 }
+            })
+        }
 
+
+
+
+        //清空访问量
+
+        function resetAccess(){
+            let msg = "您真的确定要清空吗？\n\n请确认！";
+            if (confirm(msg) === true){
+                $.ajax({
+                    url: "/access/resetAccess",
+                    type: "post",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (data) {
+                        //请求成功
+                        if (data.code === 200) {
+                            Message.success(data.msg);
+                        }else {
+                            layer.msg(data.msg)
+                        }
+
+                    }
+                })
             }
-        })
-    }
-
-
-
-
-    //清空访问量
-
-    function resetAccess(){
-           let msg = "您真的确定要清空吗？\n\n请确认！";
-             if (confirm(msg) === true){
-                 $.ajax({
-                     url: "/access/resetAccess",
-                     type: "post",
-                     dataType: "json",
-                     contentType: "application/json",
-                     success: function (data) {
-                         //请求成功
-                         if (data.code === 200) {
-                             Message.success(data.msg);
-                         }else {
-                             layer.msg(data.msg)
-                         }
-
-                     }
-                 })
-             }
-    }
-    //获取访问量
-    function checkAccess(){
-        $.ajax({
-            url: "/access/checkAccess",
-            type: "post",
-            dataType: "json",
-            contentType: "application/json",
-            success: function (data) {
-                //请求成功
-                if (data.code === 200) {
+        }
+        //获取访问量
+        function checkAccess(){
+            $.ajax({
+                url: "/access/checkAccess",
+                type: "post",
+                dataType: "json",
+                contentType: "application/json",
+                success: function (data) {
+                    //请求成功
+                    if (data.code === 200) {
+                        document.getElementById("dirAccess").innerHTML = data.msg;
+                    }
                     document.getElementById("dirAccess").innerHTML = data.msg;
+
+
                 }
-                document.getElementById("dirAccess").innerHTML = data.msg;
+            })
+        }
+
+    </script>
 
 
-            }
-        })
-    }
-
-</script>
 </body>
+
 </html>
