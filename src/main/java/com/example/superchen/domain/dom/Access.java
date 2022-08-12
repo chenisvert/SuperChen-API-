@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class Access {
 
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     private Integer count; //访问量
 
