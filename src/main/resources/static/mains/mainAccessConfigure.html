@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>访问主要配置</title>
+
 </head>
 <body>
 
@@ -15,6 +17,12 @@
 <div class="upDataThreshold" style="margin-left: 40%">
     预警阈值：<input type="text" id="t1" required >
     <input type="button"  onclick="upDataThreshold()" value="修改">
+
+
+    <div class="hint" style="margin-left: 10%; width: 100px;margin-top: 100px;font-size: 20px" >
+        预警提示：指的是访问量突破阈值就会产生预警行为
+
+    </div>
 </div>
 
 <script>

@@ -6,6 +6,7 @@ import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
 import com.example.superchen.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -137,6 +138,7 @@ public class AccessController  extends BaseController{
         LambdaQueryWrapper<Access> queryWrapperAccess = new LambdaQueryWrapper<>();
         queryWrapperAccess.eq(Access::getToken,user.getToken());
         List<Access> list = accessService.list(queryWrapperAccess);
+        System.out.println(list);
         //服务未开通
         if (list.isEmpty()){
             result.setCode(SERVICE_ERROR.getErrCode());
@@ -144,8 +146,9 @@ public class AccessController  extends BaseController{
             result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
             return result;
         }
+
         for (Access access1:list) {
-            access.setCount(access1.getCount());
+            BeanUtils.copyProperties(access1,access);
         }
         if (access.getCount() > accessOn.getThreshold()){
             result.setCode(PARAMS_ERROR.getErrCode());
@@ -153,7 +156,6 @@ public class AccessController  extends BaseController{
             result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
             return result;
         }
-        access.setId(user.getId());
         access.setThreshold(accessOn.getThreshold());
         accessService.updateById(access);
 
