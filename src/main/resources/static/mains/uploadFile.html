@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SuperChen 图床</title>
+
+
+    <style>
+        body{
+            background: url("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg9.51tietu.net%2Fpic%2F2019-091320%2F0chfuz2btvc0chfuz2btvc.jpg&refer=http%3A%2F%2Fimg9.51tietu.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663918929&t=97cb7fe630621fed5fbf296d05ed9b0f");
+        }
+        .uploadfile{
+            width: 200px;
+            height: auto;
+            margin: 0 auto;
+            /*防止上传按钮换行*/
+            white-space:nowrap;
+        }
+        #dirImage{
+            border: 1px solid palevioletred;
+        }
+    </style>
+</head>
+<body>
+<p style="color:red;">本图床为轻量图床，不可用于大型项目，造成后果本站概不负责</p>
+<div class="uploadfile">
+    <form action="#"  method="post" enctype="multipart/form-data" target="iframe">
+        <input type="file" name="file" id="file"><input type="button" value="上传" onclick="upload()">
+    </form>
+</div>
+<span><img src=""  id="dirImage" alt="图片加载失败" width="200px" height="100px"></span>
+<br>
+
+<p class="header_p">图片外链：</p>
+<textarea id="dirFileUrl" cols="20" rows="2"></textarea>
+<br />
+<input type="button" onclick="jsCopy()" value="复制" class="fz" />
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script src="../js/popMessage.js"></script>
+<script>
+
+    //隐藏图片
+    document.getElementById("dirImage").style.display = "none"
+
+    //复制图片
+    function jsCopy(){
+        var e=document.getElementById("dirFileUrl");//对象是contents
+        e.select(); //选择对象
+        document.execCommand("Copy"); //执行浏览器复制命令
+        layer.msg("复制成功！")
+    }
+
+
+
+    function upload() {
+        let file = document.getElementById("file").value;
+        let fileType = $("#file")[0].files[0];
+        if (file.length === 0){
+            alert("请选择文件")
+            return false;
+        }
+        if (!imgType(fileType)){
+            Message.error("上传图片只能是jpg 、 jpeg 、 png 、 JPG 、 JPEG格式!")
+            return false;
+        }
+        document.getElementById("dirImage").style.display = "block"
+        let imgs = document.getElementById("dirImage")
+
+        var formData = new FormData
+        formData.append("file",$("#file")[0].files[0]);
+        $.ajax({
+                url: "/qiniu/uploadFile",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                 alert("开始上传，请耐心等待...")
+                },
+                async: false,
+                processData: false,
+                contentType: false,
+                data: formData,
+                method: "POST",
+                success(res) {
+                    console.log(res)
+                    if (res.code === 200) {
+                        //关闭加载层
+                        $("#dirImage").attr("src", "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F016ea057314efc0000002bf08c5256.gif&refer=http%3A%2F%2Fimg.zcool.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663985199&t=dc2cbe3d0baabea08808a1d1b1f00bc7")
+
+
+                        //检查是否完成加载
+                        let t2 = window.setInterval(function() {
+                           if (imgs.complete){
+                               $("#dirImage").attr("src", res.msg)
+                               //清除定时器
+                               clearInterval(t2)
+                               console.log("加载完成！")
+                           }
+                            console.log("正在加载...")
+                        },500)
+
+                        layer.msg("上传成功")
+                        document.getElementById("dirFileUrl").innerHTML = res.msg;
+                    } else {
+                        layer.msg(res.msg)
+                    }
+                },
+                error(err) {
+                    console.log(err)
+                    layer.closeAll('loading');
+                    Message.error("发生错误,错误码:" + err.status)
+                }
+            })
+
+    }
+
+    function imgType (file){
+        const fileType = file.type.substring(
+            file.type.lastIndexOf("/") + 1,
+            file.type.length
+        );
+        let type =
+            fileType === "jpg" ||
+            fileType === "jpeg" ||
+            fileType === "png" ||
+            fileType === "JPG" ||
+            fileType === "JPEG";
+        console.log("type", type);
+        if (!type) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+</script>
+</body>
+</html>

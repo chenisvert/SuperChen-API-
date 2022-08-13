@@ -4,6 +4,7 @@ package com.example.superchen.controller;
 
 import com.example.superchen.api.Mp4Api;
 import com.example.superchen.service.*;
+import com.example.superchen.utils.QiniuProvider;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,6 +51,8 @@ public class BaseController {
     protected IpAddressService ipAddressService;
     @Resource
     protected AccessService accessService;
+    @Resource
+    protected QiniuProvider qiniuProvider;
 
 
 

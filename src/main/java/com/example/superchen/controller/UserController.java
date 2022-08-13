@@ -99,6 +99,7 @@ public class UserController extends BaseController {
             //遍历集合
             list.stream().map((item) -> {
                 //将遍历出来的放入User
+                user.setUsername(admin.getUsername());
                 user.setEmail(item.getEmail());
                 user.setPermission(item.getPermission());
                 user.setId(item.getId());
@@ -384,6 +385,27 @@ public class UserController extends BaseController {
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         return result;
 
+    }
+
+    /***
+     *
+     * 退出登录
+     * @Author chen
+     * @Date  12:11
+     * @Param
+     * @Return Module
+     * @Since version-11
+
+     */
+
+
+    @GetMapping("/exitLogin")
+    public Module exitLogin() throws IOException {
+        User login = (User) session.getAttribute("login");
+        log.info("用户："+login.getUsername()+"退出登录");
+        session.removeAttribute("login");
+        response.sendRedirect("/user/gomain");
+        return null;
     }
 
 

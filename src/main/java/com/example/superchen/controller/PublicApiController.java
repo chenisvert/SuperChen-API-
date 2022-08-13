@@ -10,8 +10,10 @@ import com.example.superchen.domain.ro.Result;
 import com.example.superchen.utils.DateUtils;
 import com.example.superchen.utils.GenerateCodeUtils;
 import com.example.superchen.utils.IPUtil;
+import com.example.superchen.utils.IpAddressUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -326,6 +328,16 @@ public class PublicApiController extends BaseController {
                 return result;
             }
             log.info("无缓存命中——getAddress");
+
+
+            String address1 = IpAddressUtils.getIpSource(ipAddr);
+            if (!StringUtils.isEmpty(address1)){
+                log.info("第三方ip库文件命中！！！");
+                result.setCode(200);
+                result.setMsg(address1);
+                result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+                return result;
+            }
 
             queryWrapperip.eq(IpAddress::getIp,ipAddr);
             List<IpAddress> list = ipAddressService.list(queryWrapperip);

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>获取位置</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+
+  <p>天气：{{msg}}</p>
+
+
+  <button @click="send">获取当前天气</button>
+</div>
+<script>
+  new Vue({
+    el: "#app",
+    data() {
+      return {
+        msg: ""
+      }
+    },
+    methods: {
+      send() {
+        var that = this;
+        axios({
+          method: 'get',
+          url: '/apisTwo/getWeather/0/null/1218e18ccb609c468d2331ecc663544e'
+        }).then(function (res) {
+
+          if (res.data.code === 200) {
+            that.msg = res.data.msg
+          }else {
+            layer.msg(res.data.msg)
+          }
+        });
+      }
+    }
+  });
+</script>
+</body>
+</html>

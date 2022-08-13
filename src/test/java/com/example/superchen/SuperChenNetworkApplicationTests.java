@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.cj.xdevapi.JsonArray;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.BufferedReader;
@@ -24,16 +25,33 @@ class SuperChenNetworkApplicationTests {
         String address = "";
 
         try {
-            JSONObject resultJson = readJsonFromUrl("http://opendata.baidu.com/api.php?query=47.106.67.99&co=&resource_id=6006&oe=utf8");
+            JSONObject resultJson = readJsonFromUrl("http://portalweather.comsys.net.cn/weather03/api/weatherService/getDailyWeather?cityName=杭州市");
             //resultJson 是返回结果，当前只取位置信息
 
 //            address = ((JSONObject) resultJson.get("data")).getString("location");
-            JSONArray jsonArray = resultJson.getJSONArray("data");
+            JSONArray jsonArray = resultJson.getJSONArray("results");
             System.out.println(jsonArray);
+            JSONArray obs = null;
             for (int i = 0; i < jsonArray.size() ; i++) {
                 JSONObject ob = (JSONObject) jsonArray.get(i);//得到json对象
-                System.out.println(ob.getString("location"));
+                  obs = ob.getJSONArray("daily");
             }
+
+                JSONObject ob = (JSONObject) obs.get(0);//得到json对象
+                String weather = ob.getString("text_night");
+                String  date = ob.getString("date");
+                address = "杭州"+"-"+date+":"+weather;
+
+
+            System.out.println(address);
+//            JSONArray jsonArray1 = JSON.parseArray(obs.get("daily").toString());
+//            for (int i = 0; i < jsonArray1.size() ; i++) {
+//                ob = (JSONObject) jsonArray.get(i);//得到json对象
+//                address = ob.getString("text_night");
+//            }
+
+
+
 
 
             // Json字符串转换成JsonNode对象

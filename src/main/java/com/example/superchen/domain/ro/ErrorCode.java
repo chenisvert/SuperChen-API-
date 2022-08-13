@@ -18,7 +18,8 @@ public enum ErrorCode {
     TOKEN_ERROR(403,"token错误"),
     SERVICE_ERROR(402,"服务未开通"),
     TIMEOUT_ERROR(100,"请求超时"),
-    SERVER_ERROR(500,"服务器发生错误");
+    SERVER_ERROR(500,"服务器发生错误"),
+    DATA_ERROR(501,"数据获取失败");
 
 
     private int ErrCode;

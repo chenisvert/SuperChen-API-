@@ -1,20 +1,31 @@
 package com.example.superchen.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.superchen.api.WeatherApi;
+import com.example.superchen.api.getText;
 import com.example.superchen.domain.dom.Access;
 import com.example.superchen.domain.dom.User;
+import com.example.superchen.domain.ro.ErrorCode;
 import com.example.superchen.domain.ro.Result;
 import com.example.superchen.service.AccessService;
 import com.example.superchen.utils.DateUtils;
+import com.example.superchen.utils.IPUtil;
+import com.example.superchen.utils.IpAddressUtils;
+import com.example.superchen.utils.QiniuProvider;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.example.superchen.common.RedisKey.KEY;
 import static com.example.superchen.common.RedisKey.TOKEN_KEY;
-import static com.example.superchen.domain.ro.ErrorCode.SERVICE_ERROR;
-import static com.example.superchen.domain.ro.ErrorCode.TOKEN_ERROR;
+import static com.example.superchen.domain.ro.ErrorCode.*;
 
 /***
  * 开放 api
@@ -88,5 +99,59 @@ public class PubilcApiTwoController extends BaseController {
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         return result;
     }
+
+    @GetMapping("/getWeather/{day}/{model}/{token}")
+    public Result getWeather( @PathVariable Integer day,@PathVariable String model,@PathVariable String token)  {
+
+
+        String ipAddr = IPUtil.getIpAddr(request);
+        String address = IpAddressUtils.getIpSource(ipAddr);
+        log.info(address);
+        String city = address.substring(7, 10);
+        //自定义是否传城市
+        if (!model.equals("null")){
+            city = model;
+        }
+
+        log.info("入参  token：{}", token);
+//        Object tockens = this.redisTemplate.opsForValue().get("token");
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.eq(User::getToken, token);
+        List<User> userList = userService.list(queryWrapper);
+        System.out.println(userList);
+        if (!userList.isEmpty()) {
+            Object weatherCache = redisTemplate.opsForValue().get(ipAddr+"_"+KEY + "_getWeather_"+city+"_"+day);
+            if (weatherCache != null){
+                result.setCode(200);
+                result.setMsg(weatherCache);
+                result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+                return result;
+            }
+
+            String weather = new WeatherApi().getWeather(city, day);
+
+            redisTemplate.opsForValue().set(ipAddr+"_"+KEY + "_getWeather_"+city+"_"+day,weather,3, TimeUnit.HOURS);
+            result.setCode(200);
+            result.setMsg(weather);
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+
+        //超出天数
+        if (day > 2){
+            result.setCode(PARAMS_ERROR.getErrCode());
+            result.setMsg(PARAMS_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+            log.info("token 认证错误");
+            result.setCode(TOKEN_ERROR.getErrCode());
+            result.setMsg(TOKEN_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+    }
+
+
+
 
 }
