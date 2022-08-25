@@ -84,10 +84,8 @@
                 success(res) {
                     console.log(res)
                     if (res.code === 200) {
-                        //关闭加载层
+                        //设置默认加载动画
                         $("#dirImage").attr("src", "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F016ea057314efc0000002bf08c5256.gif&refer=http%3A%2F%2Fimg.zcool.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663985199&t=dc2cbe3d0baabea08808a1d1b1f00bc7")
-
-
                         //检查是否完成加载
                         let t2 = window.setInterval(function() {
                            if (imgs.complete){

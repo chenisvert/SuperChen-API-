@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.example.superchen.anno.PermissionAnnotation;
 import com.example.superchen.common.BaseContext;
 import com.example.superchen.common.UserException;
 import com.example.superchen.domain.dom.Access;
 import com.example.superchen.domain.dom.Url;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
+import com.example.superchen.domain.ro.RoleEnum;
 import com.example.superchen.utils.DateUtils;
 import com.example.superchen.utils.JwtUtils;
 import com.example.superchen.utils.MD5Util;
@@ -48,6 +50,7 @@ public class UserController extends BaseController {
 
 
 
+
     @RequestMapping(value = "/gomain")
     public String goLogin() throws IOException {
         try {
@@ -71,11 +74,14 @@ public class UserController extends BaseController {
             log.info(user.getPermission());
             //普通用户跳转
             if (user.getPermission().equals("user")) {
+                session.setAttribute("permission",RoleEnum.USER);
                 return "user";
             }
 
         } catch (NullPointerException e) {
+            log.error(e.getMessage());
         }
+            session.setAttribute("permission",RoleEnum.ADMIN);
             return "admin/admin";
 
 
@@ -111,7 +117,6 @@ public class UserController extends BaseController {
             user.setUsername(admin.getUsername());
             user.setPassword(admin.getPassword());
             session.setAttribute("login", user);
-
             //修改登录时间
 //            userService.updateTime(user);
             //放入ThreadLocal
@@ -184,6 +189,7 @@ public class UserController extends BaseController {
     /*
      * 更加当前登录的用户获取其信息
      * */
+    @PermissionAnnotation({RoleEnum.USER,RoleEnum.VIP})
     @ResponseBody
     @PostMapping("/getUser")
     public User getUser() {
@@ -294,7 +300,7 @@ public class UserController extends BaseController {
     /*
     * 以下为后台管理
     * */
-
+    @PermissionAnnotation(RoleEnum.ADMIN)
     @GetMapping("/list")
     public  String list() throws IOException {
         User user = (User) session.getAttribute("login");
@@ -330,6 +336,7 @@ public class UserController extends BaseController {
      * @Since version-11
 
      */
+    @PermissionAnnotation(RoleEnum.ADMIN)
     @GetMapping("/delete/{id}")
     public  String delete(@PathVariable  Long id) throws IOException {
         User user = (User) session.getAttribute("login");
@@ -397,7 +404,6 @@ public class UserController extends BaseController {
      * @Since version-11
 
      */
-
 
     @GetMapping("/exitLogin")
     public Module exitLogin() throws IOException {

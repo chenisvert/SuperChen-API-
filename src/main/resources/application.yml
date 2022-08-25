@@ -56,7 +56,7 @@ qiniu:
   bucket: superchenweb
   domain_of_bucket: http://api.hh2022.cn
   access_token: 0hekMJHr9kc8ZijWiV6Csq4KDSjZPLkncSh6TT8U
-  secret_token: 7jqDSdfADdJMHVp2Au4yqOGzwsNPkUbZZ6EeTaoS
+  secret_token: 0hekMJHr9kc8ZijWiV6Csq4KDSjZPLkncSh6TT8U
 
 mybatis-plus:
   configuration:
