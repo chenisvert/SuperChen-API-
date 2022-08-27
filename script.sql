@@ -66,13 +66,10 @@ create table user
     permission  varchar(10) default 'user' not null,
     create_time datetime                   null,
     token       varchar(200)               not null,
-    constraint admin_id_uindex
-        unique (id),
-    constraint user_tocken_uindex
-        unique (token),
     constraint user_username_uindex
         unique (username)
 );
+
 
 create table vipvideo
 (
