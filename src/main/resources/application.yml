@@ -9,9 +9,9 @@ spring:
   datasource:
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/network?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://172.23.42.66:3306/network?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
-      password: chen
+      password: Chen2726225713
 
 
   # 邮箱配置
@@ -23,8 +23,8 @@ spring:
     port: 587
   # redis配置
   redis:
-    host: localhost # 本地IP 或是 虚拟机IP
-#    password: Chen2726225713
+    host: 172.23.42.66 # 本地IP 或是 虚拟机IP
+    password: Chen2726225713
     port: 6379
     cache:
       redis:
@@ -44,8 +44,8 @@ spring:
   # 配置文件上传相关
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 15MB
+      max-request-size: 15MB
   thymeleaf:
     mode: HTML
     cache: false
@@ -55,8 +55,8 @@ spring:
 qiniu:
   bucket: superchenweb
   domain_of_bucket: http://api.hh2022.cn
-  access_token: xxxxxxx
-  secret_token: xxxxxxx
+  access_token: 0hekMJHr9kc8ZijWiV6Csq4KDSjZPLkncSh6TT8U
+  secret_token: 7jqDSdfADdJMHVp2Au4yqOGzwsNPkUbZZ6EeTaoS
 
 mybatis-plus:
   configuration:

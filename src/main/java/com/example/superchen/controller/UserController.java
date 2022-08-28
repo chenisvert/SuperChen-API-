@@ -1,22 +1,19 @@
 package com.example.superchen.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.example.superchen.anno.AccessLimit;
 import com.example.superchen.anno.PermissionAnnotation;
 import com.example.superchen.common.BaseContext;
-import com.example.superchen.common.UserException;
 import com.example.superchen.domain.dom.Access;
 import com.example.superchen.domain.dom.Url;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
 import com.example.superchen.domain.ro.RoleEnum;
-import com.example.superchen.utils.DateUtils;
-import com.example.superchen.utils.JwtUtils;
-import com.example.superchen.utils.MD5Util;
-import com.example.superchen.utils.ValidateCodeUtils;
+import com.example.superchen.utils.*;
+import com.github.kevinsawicki.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -25,15 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.example.superchen.common.RedisKey.*;
-import static com.example.superchen.domain.ro.ErrorCode.LOGIN_ERROR;
+import static com.example.superchen.domain.ro.ErrorCode.*;
 
 @Slf4j
 @Controller
@@ -87,6 +82,7 @@ public class UserController extends BaseController {
 
     }
 
+    @AccessLimit(seconds = 2, maxCount = 3)
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody User admin) throws IOException {
@@ -138,7 +134,7 @@ public class UserController extends BaseController {
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         return result;
     }
-
+    @AccessLimit(seconds = 20, maxCount = 3) //15秒内 允许请求3次
     @ResponseBody
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
@@ -247,6 +243,7 @@ public class UserController extends BaseController {
      * @Since version-11
 
      */
+    @AccessLimit(seconds = 1, maxCount = 6)
     @ResponseBody
     @GetMapping("/countRow")
     public Result countRow() {
@@ -300,6 +297,7 @@ public class UserController extends BaseController {
     /*
     * 以下为后台管理
     * */
+    @AccessLimit(seconds = 10, maxCount = 3) //15秒内 允许请求3次
     @PermissionAnnotation(RoleEnum.ADMIN)
     @GetMapping("/list")
     public  String list() throws IOException {
@@ -412,6 +410,29 @@ public class UserController extends BaseController {
         session.removeAttribute("login");
         response.sendRedirect("/user/gomain");
         return null;
+    }
+
+    @ResponseBody
+    @GetMapping("/feedback/{context}")
+    public Result feedback(@PathVariable String context){
+        if (StringUtils.isEmpty(context)){
+            result.setCode(PARAMS_ERROR.getErrCode());
+            result.setMsg(PARAMS_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        }
+        try {
+            String response = HttpRequest.get("http://api.day.app/RAbJyhfhE9LUCM5zvkffcj/SuperChen-API-紧急通知/ip:"+IPUtil.getIpAddr(request)+"_消息："+context).body();
+        }catch (Exception e){
+            log.error(e.getMessage());
+            result.setCode(SERVER_ERROR.getErrCode());
+            result.setMsg(SERVER_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        result.setCode(200);
+        result.setMsg("反馈成功");
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
     }
 
 

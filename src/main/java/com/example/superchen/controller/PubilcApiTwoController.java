@@ -1,6 +1,7 @@
 package com.example.superchen.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.superchen.anno.AccessLimit;
 import com.example.superchen.api.WeatherApi;
 import com.example.superchen.api.getText;
 import com.example.superchen.domain.dom.Access;
@@ -52,6 +53,8 @@ public class PubilcApiTwoController extends BaseController {
      * @Since version-11
 
      */
+
+    @AccessLimit(seconds = 1, maxCount = 7) //1秒运行请求7次
     @ResponseBody
     @GetMapping("/setAccessCount/{token}")
     public Result setAccessCount(@PathVariable String token) {
@@ -100,6 +103,7 @@ public class PubilcApiTwoController extends BaseController {
         return result;
     }
 
+    @AccessLimit(seconds = 1, maxCount = 5) //1秒运行请求5次
     @GetMapping("/getWeather/{day}/{model}/{token}")
     public Result getWeather( @PathVariable Integer day,@PathVariable String model,@PathVariable String token)  {
 

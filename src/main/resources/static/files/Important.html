@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
+    <meta name="referrer" content="no-referrer">
+    <title>紧急反馈</title>
+
+</head>
+<body>
+<p align="center">此反馈可以直接联系到开发者</p>
+反馈：<input type="text" id="f">
+<input type="button" onclick="feedback()" value="反馈">
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script src="../js/popMessage.js"></script>
+<script>
+    function feedback(){
+        let feedback =  document.getElementById("f").value
+        $.ajax({
+            url: "/user/feedback/"+feedback,
+            type: "get",
+            dataType: "json",
+            contentType: "application/json",
+            // data: JSON.stringify({"context":musicName}),
+            beforeSend: function (xhr) {
+                layer.msg("获取中。。。", {icon: 16})
+            },
+            success: function (data) {
+                //请求成功
+                if (data.code === 200) {
+                   layer.msg(data.msg)
+                }else {
+                    Message.error(data.msg);
+                }
+
+            }
+        })
+
+    }
+
+
+</script>
+</body>
+</html>

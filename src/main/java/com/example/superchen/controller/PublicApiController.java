@@ -1,6 +1,7 @@
 package com.example.superchen.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.superchen.anno.AccessLimit;
 import com.example.superchen.api.BaiduAddressUtil;
 import com.example.superchen.api.getText;
 import com.example.superchen.domain.dom.IpAddress;
@@ -56,6 +57,8 @@ public class PublicApiController extends BaseController {
      * @Since version-11
 
      */
+
+    @AccessLimit(seconds = 1, maxCount = 5)
     @ResponseBody
     @GetMapping("/getimages/{id}/{token}")
     public Result Imgurl(@PathVariable int id, @PathVariable String token) {
@@ -94,6 +97,7 @@ public class PublicApiController extends BaseController {
 
      */
 
+    @AccessLimit(seconds = 1, maxCount = 7)
     @GetMapping({"/img/{token}"})
     public ModelAndView getImg(@PathVariable String token) throws IOException {
         log.info("入参  token：{}", token);
@@ -126,6 +130,8 @@ public class PublicApiController extends BaseController {
      * @Since version-11
 
      */
+
+    @AccessLimit(seconds = 1, maxCount = 3)
     @ResponseBody
     @GetMapping({"/generateCode/{url}/{token}"})
     public Result generateCode(@PathVariable String url, @PathVariable String token) throws IOException {
@@ -193,6 +199,16 @@ public class PublicApiController extends BaseController {
         }
     }
 
+    /***
+     *
+     * 二维码跳转
+     * @Author chen
+     * @Date  18:16
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
     @ResponseBody
     @GetMapping("/generateCode/{token}")
     public ModelAndView generateCode(@PathVariable String token) throws IOException {
@@ -303,6 +319,8 @@ public class PublicApiController extends BaseController {
      * @Since version-11
 
      */
+
+    @AccessLimit(seconds = 1, maxCount = 8)
     @GetMapping("/getAddress/{token}")
     public Object getWz(@PathVariable String token ) {
         BaiduAddressUtil baiduAddressUtil = new BaiduAddressUtil();

@@ -53,7 +53,7 @@ public class QiniuController extends BaseController{
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             //使用UUID重新生存文件名，防止覆盖
             String fileName = UUID.randomUUID().toString()+suffix;
-            String upload = qiniuProvider.upload(inputStream,fileName);
+                String upload = qiniuProvider.upload(inputStream,fileName);
             inputStream.close();
             result.setCode(200);
             result.setMsg(upload);
