@@ -412,6 +412,8 @@ public class UserController extends BaseController {
         return null;
     }
 
+
+    @AccessLimit(seconds = 2,maxCount = 8)
     @ResponseBody
     @GetMapping("/feedback/{context}")
     public Result feedback(@PathVariable String context){

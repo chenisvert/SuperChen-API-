@@ -1,6 +1,6 @@
 package com.example.superchen.config;
 
-import com.example.superchen.aop.SessionInterceptor;
+import com.example.superchen.hander.SessionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

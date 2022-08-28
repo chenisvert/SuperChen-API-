@@ -1,6 +1,7 @@
 package com.example.superchen.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.superchen.anno.AccessLimit;
 import com.example.superchen.domain.dom.Access;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
@@ -64,6 +65,8 @@ public class AccessController  extends BaseController{
 
     }
 
+
+    @AccessLimit(seconds = 1, maxCount = 7)
     @ResponseBody
     @PostMapping("/checkAccess")
     public Result checkAccess() {

@@ -16,31 +16,38 @@
 <script src="../layer/layer.js"></script>
 <script src="../js/popMessage.js"></script>
 <script>
-    function feedback(){
-        let feedback =  document.getElementById("f").value
-        $.ajax({
-            url: "/user/feedback/"+feedback,
-            type: "get",
-            dataType: "json",
-            contentType: "application/json",
-            // data: JSON.stringify({"context":musicName}),
-            beforeSend: function (xhr) {
-                layer.msg("获取中。。。", {icon: 16})
-            },
-            success: function (data) {
-                //请求成功
-                if (data.code === 200) {
-                   layer.msg(data.msg)
-                }else {
-                    Message.error(data.msg);
-                }
+    function feedback() {
 
-            }
-        })
+        //获取反馈
+        let feedback = document.getElementById("f").value
+        //判空
+        if (feedback === '') {
+            layer.msg("请填写反馈")
+            return false;
+        } else {
+            $.ajax({
+                url: "/user/feedback/" + feedback,
+                type: "get",
+                dataType: "json",
+                contentType: "application/json",
+                // data: JSON.stringify({"context":musicName}),
+                beforeSend: function (xhr) {
+                    layer.msg("获取中。。。", {icon: 16})
+                },
+                success: function (data) {
+                    //请求成功
+                    if (data.code === 200) {
+                        layer.msg(data.msg)
+                    } else {
+                        Message.error(data.msg);
+                    }
+
+                }
+            })
+
+        }
 
     }
-
-
 </script>
 </body>
 </html>

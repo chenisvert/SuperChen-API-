@@ -1,9 +1,12 @@
 package com.example.superchen.aop;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.superchen.anno.PermissionAnnotation;
 import com.example.superchen.common.UserException;
 import com.example.superchen.domain.ro.Result;
 import com.example.superchen.domain.ro.RoleEnum;
+import com.example.superchen.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,11 +17,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import static com.example.superchen.domain.ro.ErrorCode.PERMISSION_ERROR;
+import static com.example.superchen.domain.ro.ErrorCode.TIMEOUT_ERROR;
 
 @Aspect
 @Component
@@ -54,12 +59,19 @@ public class MyAnnotationPermission {
             return joinPoint.proceed();
         }
         Result result = new Result<>();
-//        result.setCode(PERMISSION_ERROR.getErrCode());
-//        result.setMsg(PERMISSION_ERROR.getErrMsg());
-//        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
-//        return result;
+        //返回
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        response.setCharacterEncoding("GBK");
+        result.setCode(PERMISSION_ERROR.getErrCode());
+        result.setMsg(PERMISSION_ERROR.getErrMsg());
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        //转json
+        String s = JSON.toJSONString(result);
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(s);
+        return null;
 
-        throw new UserException(PERMISSION_ERROR.getErrMsg());
+//        throw new UserException(PERMISSION_ERROR.getErrMsg());
 
     }
 }
