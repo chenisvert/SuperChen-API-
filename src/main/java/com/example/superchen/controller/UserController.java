@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -86,8 +87,8 @@ public class UserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody User admin) throws IOException {
+        User users = new User();
 
-        User user = new User();
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         Boolean login = userService.Login(admin);
 
@@ -99,7 +100,7 @@ public class UserController extends BaseController {
             queryWrapper.eq(User::getUsername,admin.getUsername());
             List<User> list = userService.list(queryWrapper);
             //遍历集合
-            list.stream().map((item) -> {
+             list.stream().map((item) -> {
                 //将遍历出来的放入User
                 user.setUsername(admin.getUsername());
                 user.setEmail(item.getEmail());
@@ -107,19 +108,21 @@ public class UserController extends BaseController {
                 user.setId(item.getId());
                 user.setCreateTime(item.getCreateTime());
                 user.setToken(item.getToken());
-                return user;
+                users.setCreateTime(item.getCreateTime());
+                return this.user;
             }).collect(Collectors.toList());
-            //将前端的参数绑定上
-            user.setUsername(admin.getUsername());
-            user.setPassword(admin.getPassword());
-            session.setAttribute("login", user);
+            users.setUsername(user.getUsername());
+            //设置session
+            session.setAttribute("login", users);
             //修改登录时间
-//            userService.updateTime(user);
+            this.user.setCreateTime(LocalDateTime.now());
+            userService.updateById(this.user);
+
             //放入ThreadLocal
-            BaseContext.setCurrentId(user.getId());
+            BaseContext.setCurrentId(this.user.getId());
             //生成token
             JwtUtils jwtUtils = new JwtUtils();
-            String jwtToken = jwtUtils.getJwtToken(user.getId(), user.getUsername());
+            String jwtToken = jwtUtils.getJwtToken(this.user.getId(), this.user.getUsername());
             //token放入redis
             redisTemplate.opsForValue().set(JWTTOKEN_KEY,jwtToken,12,TimeUnit.HOURS);
             //设置返回
@@ -412,6 +415,8 @@ public class UserController extends BaseController {
         return null;
     }
 
+
+    @AccessLimit(seconds = 2,maxCount = 8)
     @ResponseBody
     @GetMapping("/feedback/{context}")
     public Result feedback(@PathVariable String context){

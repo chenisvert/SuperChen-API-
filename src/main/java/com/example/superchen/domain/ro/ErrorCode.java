@@ -20,7 +20,8 @@ public enum ErrorCode {
     TIMEOUT_ERROR(100,"请求超时"),
     SERVER_ERROR(500,"服务器发生错误"),
     DATA_ERROR(501,"数据获取失败"),
-    PERMISSION_ERROR(401,"权限不足");
+    PERMISSION_ERROR(401,"权限不足"),
+    SESSION_ERROR(403,"请登录");
 
 
     private int ErrCode;
