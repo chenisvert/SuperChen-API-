@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class AnnouncementController extends BaseController{
 
 
-    private Result result = new Result<>();
+    private Result result = new Result<>();git commit -m
     private  Announcement announcement =  new Announcement();
 
     @AccessLimit(seconds = 1, maxCount = 10)
