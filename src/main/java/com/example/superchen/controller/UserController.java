@@ -46,7 +46,7 @@ public class UserController extends BaseController {
 
 
 
-
+    @AccessLimit(seconds = 1, maxCount = 10)
     @RequestMapping(value = "/gomain")
     public String goLogin() throws IOException {
         try {
@@ -73,20 +73,18 @@ public class UserController extends BaseController {
                 session.setAttribute("permission",RoleEnum.USER);
                 return "user";
             }
-
         } catch (NullPointerException e) {
             log.error(e.getMessage());
         }
             session.setAttribute("permission",RoleEnum.ADMIN);
             return "admin/admin";
-
-
     }
 
     @AccessLimit(seconds = 2, maxCount = 3)
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody User admin) throws IOException {
+
         User users = new User();
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
@@ -136,6 +134,7 @@ public class UserController extends BaseController {
         result.setMsg(LOGIN_ERROR.getErrMsg());
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         return result;
+
     }
     @AccessLimit(seconds = 20, maxCount = 3) //15秒内 允许请求3次
     @ResponseBody
