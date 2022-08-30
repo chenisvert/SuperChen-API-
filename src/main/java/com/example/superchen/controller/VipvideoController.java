@@ -1,6 +1,7 @@
 package com.example.superchen.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.superchen.anno.AccessLimit;
 import com.example.superchen.domain.dom.ImagesUrl;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.dom.Vipvideo;
@@ -19,6 +20,7 @@ public class VipvideoController extends BaseController{
 
     private Result result = new Result<>();
 
+    @AccessLimit(seconds = 10, maxCount = 5)
     @PostMapping("/list")
     public Result saveImage(@RequestBody Vipvideo vipvideo){
         log.info("入参 ：{}",vipvideo);

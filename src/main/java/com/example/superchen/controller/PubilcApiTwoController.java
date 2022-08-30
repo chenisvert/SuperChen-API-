@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.superchen.anno.AccessLimit;
 import com.example.superchen.api.WeatherApi;
 import com.example.superchen.api.getText;
+import com.example.superchen.common.UserException;
 import com.example.superchen.domain.dom.Access;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.ErrorCode;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -59,6 +61,13 @@ public class PubilcApiTwoController extends BaseController {
     @GetMapping("/setAccessCount/{token}")
     public Result setAccessCount(@PathVariable String token) {
         log.info("入参 ,token：{}", token);
+        if (StringUtils.isEmpty(token)){
+            result.setCode(PARAMS_ERROR.getErrCode());
+            result.setMsg(PARAMS_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        Optional.ofNullable(token).orElseThrow(()->new UserException("参数为空！"));
 
         Access access = new Access();
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
@@ -107,6 +116,13 @@ public class PubilcApiTwoController extends BaseController {
     @GetMapping("/getWeather/{day}/{model}/{token}")
     public Result getWeather( @PathVariable Integer day,@PathVariable String model,@PathVariable String token)  {
 
+        Optional.ofNullable(day).orElseThrow(()->new UserException("日期为空！"));
+        if (StringUtils.isEmpty(token) | StringUtils.isEmpty(model) ){
+            result.setCode(PARAMS_ERROR.getErrCode());
+            result.setMsg(PARAMS_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
 
         String ipAddr = IPUtil.getIpAddr(request);
         String address = IpAddressUtils.getIpSource(ipAddr);

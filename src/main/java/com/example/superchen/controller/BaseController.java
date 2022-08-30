@@ -52,7 +52,11 @@ public class BaseController {
     @Resource
     protected AccessService accessService;
     @Resource
+    protected AnnouncementService announcementService;
+    @Resource
     protected QiniuProvider qiniuProvider;
+
+
 
 
 

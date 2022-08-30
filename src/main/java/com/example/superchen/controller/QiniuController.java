@@ -1,6 +1,7 @@
 package com.example.superchen.controller;
 
 
+import com.example.superchen.anno.AccessLimit;
 import com.example.superchen.domain.ro.Result;
 import com.example.superchen.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class QiniuController extends BaseController{
 
     private Result result = new Result<>();
 
+    @AccessLimit(seconds = 10, maxCount = 2)
     @GetMapping("/getQnyFile/{fileName}")
     public Module getWeather( @PathVariable String fileName)  {
 
@@ -34,6 +36,7 @@ public class QiniuController extends BaseController{
         return null;
     }
 
+    @AccessLimit(seconds = 10, maxCount = 2)
     @PostMapping("/uploadFile")
     public Result uploadFile( @PathVariable MultipartFile file)  {
         //上传文件为空

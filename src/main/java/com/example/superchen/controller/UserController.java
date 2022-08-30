@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +46,7 @@ public class UserController extends BaseController {
 
 
 
-
+    @AccessLimit(seconds = 1, maxCount = 10)
     @RequestMapping(value = "/gomain")
     public String goLogin() throws IOException {
         try {
@@ -72,14 +73,11 @@ public class UserController extends BaseController {
                 session.setAttribute("permission",RoleEnum.USER);
                 return "user";
             }
-
         } catch (NullPointerException e) {
             log.error(e.getMessage());
         }
             session.setAttribute("permission",RoleEnum.ADMIN);
             return "admin/admin";
-
-
     }
 
     @AccessLimit(seconds = 2, maxCount = 3)
@@ -87,7 +85,8 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody User admin) throws IOException {
 
-        User user = new User();
+        User users = new User();
+
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         Boolean login = userService.Login(admin);
 
@@ -99,7 +98,7 @@ public class UserController extends BaseController {
             queryWrapper.eq(User::getUsername,admin.getUsername());
             List<User> list = userService.list(queryWrapper);
             //遍历集合
-            list.stream().map((item) -> {
+             list.stream().map((item) -> {
                 //将遍历出来的放入User
                 user.setUsername(admin.getUsername());
                 user.setEmail(item.getEmail());
@@ -107,19 +106,21 @@ public class UserController extends BaseController {
                 user.setId(item.getId());
                 user.setCreateTime(item.getCreateTime());
                 user.setToken(item.getToken());
-                return user;
+                users.setCreateTime(item.getCreateTime());
+                return this.user;
             }).collect(Collectors.toList());
-            //将前端的参数绑定上
-            user.setUsername(admin.getUsername());
-            user.setPassword(admin.getPassword());
-            session.setAttribute("login", user);
+            users.setUsername(user.getUsername());
+            //设置session
+            session.setAttribute("login", users);
             //修改登录时间
-//            userService.updateTime(user);
+            this.user.setCreateTime(LocalDateTime.now());
+            userService.updateById(this.user);
+
             //放入ThreadLocal
-            BaseContext.setCurrentId(user.getId());
+            BaseContext.setCurrentId(this.user.getId());
             //生成token
             JwtUtils jwtUtils = new JwtUtils();
-            String jwtToken = jwtUtils.getJwtToken(user.getId(), user.getUsername());
+            String jwtToken = jwtUtils.getJwtToken(this.user.getId(), this.user.getUsername());
             //token放入redis
             redisTemplate.opsForValue().set(JWTTOKEN_KEY,jwtToken,12,TimeUnit.HOURS);
             //设置返回
@@ -133,6 +134,7 @@ public class UserController extends BaseController {
         result.setMsg(LOGIN_ERROR.getErrMsg());
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         return result;
+
     }
     @AccessLimit(seconds = 20, maxCount = 3) //15秒内 允许请求3次
     @ResponseBody
@@ -163,7 +165,7 @@ public class UserController extends BaseController {
         return result;
     }
 
-
+    @AccessLimit(seconds = 1, maxCount = 5)
     @ResponseBody
     @PostMapping("/repeat")
     public Result repeat(String username) {
@@ -193,6 +195,7 @@ public class UserController extends BaseController {
         return user;
     }
 
+    @AccessLimit(seconds = 1, maxCount = 5)
     @ResponseBody
     @GetMapping("/report")
     public Result report( Url url) {
@@ -209,6 +212,7 @@ public class UserController extends BaseController {
     /*
     * 获取token
     * */
+    @AccessLimit(seconds = 1, maxCount = 5)
     @ResponseBody
     @PostMapping("/geToken")
     public Result geToken() {

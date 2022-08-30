@@ -50,7 +50,7 @@ main{width: 100%;padding: 10px;}
     <!--公告-->
     <div class="notice flex">
         <i class="fan son-gonggao"></i>
-        <marquee><h2>近期没有公告</h2></marquee>
+        <marquee><h2 id="gg"></h2></marquee>
         </div>
     <!--大板块-->
     <main class="app">
@@ -123,7 +123,7 @@ main{width: 100%;padding: 10px;}
 <!--                    </a>-->
 <!--                </li>&ndash;&gt;-->
 <!--            </ul>-->
-        </main>  
+        </main>
     <!--大板块-->
     <main class="app">
         <div class="app-meta flex">
@@ -196,10 +196,10 @@ main{width: 100%;padding: 10px;}
                     </a>
                 </li>
             </ul>
-        </main> 
+        </main>
     </main>
 
-    
+
 
 </header>
 
@@ -274,9 +274,31 @@ main{width: 100%;padding: 10px;}
             contentType: "application/json",
             // data: JSON.stringify({"username": username, "password": password}),
             success: function (data) {
-                document.getElementById("usernamedir").innerHTML = "欢迎！用户"+data.username+"</br>" +"您的上次登录时间"+data.createTime
-            },
+                layer.alert('欢迎！用户'+data.username+'<br>'+
+                    '您的上次登录时间:'+data.createTime, {
+                    icon: 1,
+                    skin: 'msg'
+                })
 
+            },
+            error: function (e)//服务器响应失败处理函数
+            {
+                alert("发生错误,错误码:" + e.status);
+                console.log(e.message)
+            }
+
+        })
+
+
+        $.ajax({
+            url: "/announcement/getAnnouncement",
+            type: "get",
+            dataType: "json",
+            contentType: "application/json",
+            // data: JSON.stringify({"username": username, "password": password}),
+            success: function (data) {
+                document.getElementById("gg").innerHTML = data.msg.context;
+            },
             error: function (e)//服务器响应失败处理函数
             {
                 alert("发生错误,错误码:" + e.status);

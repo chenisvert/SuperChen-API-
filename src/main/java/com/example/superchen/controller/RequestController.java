@@ -1,5 +1,6 @@
 package com.example.superchen.controller;
 
+import com.example.superchen.anno.AccessLimit;
 import com.example.superchen.domain.ro.Result;
 import com.example.superchen.utils.DateUtils;
 import com.example.superchen.utils.TextUtil;
@@ -31,6 +32,7 @@ public class RequestController extends BaseController {
      * @Since version-11
 
      */
+    @AccessLimit(seconds = 10, maxCount = 2)
     @ResponseBody
     @GetMapping("/sendUrl/{url}")
     public Result sendUrl(@PathVariable String url)  {
@@ -59,6 +61,7 @@ public class RequestController extends BaseController {
      * @Since version-11
 
      */
+    @AccessLimit(seconds = 10, maxCount = 2)
     @ResponseBody
     @GetMapping("/sendUrls/{url}")
     public Result sendUrls(@PathVariable String url) {
