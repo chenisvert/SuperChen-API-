@@ -54,6 +54,7 @@ public class VipvideoController extends BaseController{
         return result;
     }
 
+    @AccessLimit(seconds = 1, maxCount = 8)
     @GetMapping("/countRow")
     public Result saveImage(){
         int count = vipvideoService.countRow();

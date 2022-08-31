@@ -284,6 +284,17 @@ public class PublicApiController extends BaseController {
 
     }
 
+    /***
+     *
+     * 随机笑话
+     * @Author chen
+     * @Date  18:47
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
+    @AccessLimit(seconds = 1,maxCount = 9)
     @GetMapping("/getText/{token}")
     public Result getText( @PathVariable String token) throws IOException, InterruptedException {
 

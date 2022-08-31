@@ -112,6 +112,17 @@ public class PubilcApiTwoController extends BaseController {
         return result;
     }
 
+    /***
+     *
+     * 获取天气
+     * @Author chen
+     * @Date  19:12
+     * @Param  day（天气日期），model（城市），token（认证）
+     * @Return Result
+     * @Since version-11
+
+     */
+
     @AccessLimit(seconds = 1, maxCount = 5) //1秒运行请求5次
     @GetMapping("/getWeather/{day}/{model}/{token}")
     public Result getWeather( @PathVariable Integer day,@PathVariable String model,@PathVariable String token)  {

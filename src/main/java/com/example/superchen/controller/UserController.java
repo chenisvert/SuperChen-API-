@@ -45,7 +45,6 @@ public class UserController extends BaseController {
     private Random random = new Random();
 
 
-
     @AccessLimit(seconds = 1, maxCount = 10)
     @RequestMapping(value = "/gomain")
     public String goLogin() throws IOException {
@@ -91,7 +90,6 @@ public class UserController extends BaseController {
         Boolean login = userService.Login(admin);
 
         if (login) {
-
             //登录成功
             //根据前端传入的用户名，查询对应
             queryWrapper.select(User::getEmail, User::getPermission, User::getId, User::getCreateTime, User::getUsername,User::getToken);

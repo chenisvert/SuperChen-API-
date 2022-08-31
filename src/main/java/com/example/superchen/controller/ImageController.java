@@ -30,7 +30,17 @@ import static com.example.superchen.common.RedisKey.KEY;
 public class ImageController  extends BaseController{
     private Result result = new Result<>();
 
+    /***
+     *
+     * 保存上传图片链接
+     * @Author chen
+     * @Date  19:14
+     * @Param  ImagesUrl
+     * @Return Result
+     * @Since version-11
 
+     */
+    @AccessLimit(seconds = 5,maxCount = 2)
     @ResponseBody
     @PostMapping("/save")
     public Result saveImage(@RequestBody ImagesUrl img){
