@@ -22,20 +22,15 @@ import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import static com.example.superchen.domain.ro.ErrorCode.PERMISSION_ERROR;
-<<<<<<< HEAD
-import static com.example.superchen.domain.ro.ErrorCode.TIMEOUT_ERROR;
-=======
-import static com.example.superchen.domain.ro.ErrorCode.SESSION_ERROR;
+import static com.example.superchen.domain.ro.ErrorCode.*;
 
->>>>>>> newMaster
 
 @Aspect
 @Component
 @Slf4j
 public class MyAnnotationPermission {
 
-
+        private Result result = new Result<>();
         //切入点表达式决定了用注解方式的方法切还是针对某个路径下的所有类和方法进行切，方法必须是返回void类型
 
         @Pointcut("execution(public * com.example.superchen.controller.UserController.*(..))")
@@ -45,7 +40,6 @@ public class MyAnnotationPermission {
         //定义了切面的处理逻辑。即方法上加了@PermissionAnnotation注解，将会进行权限校验
         @Around("roleCheckCut()")
         public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-            Result result = new Result<>();
             HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
             //获取session
             ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -94,25 +88,5 @@ public class MyAnnotationPermission {
 
 //        throw new UserException(PERMISSION_ERROR.getErrMsg());
         }
-<<<<<<< HEAD
-        Result result = new Result<>();
-        //返回
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        response.setCharacterEncoding("GBK");
-        result.setCode(PERMISSION_ERROR.getErrCode());
-        result.setMsg(PERMISSION_ERROR.getErrMsg());
-        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
-        //转json
-        String s = JSON.toJSONString(result);
-        response.setCharacterEncoding("utf-8");
-        response.getWriter().write(s);
-        return null;
 
-//        throw new UserException(PERMISSION_ERROR.getErrMsg());
-
-    }
 }
-=======
-}
-
->>>>>>> newMaster

@@ -110,6 +110,8 @@ public class UserController extends BaseController {
                 return this.user;
             }).collect(Collectors.toList());
             users.setUsername(user.getUsername());
+            users.setId(user.getId());
+            users.setToken(user.getToken());
             //设置session
             session.setAttribute("login", users);
             //修改登录时间

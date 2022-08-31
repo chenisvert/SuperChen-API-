@@ -2,10 +2,7 @@ package com.example.superchen.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.superchen.anno.AccessLimit;
-<<<<<<< HEAD
-=======
 import com.example.superchen.common.UserException;
->>>>>>> newMaster
 import com.example.superchen.domain.dom.Access;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
