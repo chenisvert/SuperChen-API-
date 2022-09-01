@@ -9,6 +9,9 @@ import com.example.superchen.mapper.UserMapper;
 import com.example.superchen.service.UserService;
 import com.example.superchen.utils.MD5Util;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -58,6 +61,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("username",user.getUsername()).set("create_time", LocalDateTime.now());
         userMapper.update(null,updateWrapper);
+    }
+
+
+    @Value("${spring.mail.username}")
+    private String from;   // 邮件发送人
+
+    @Resource
+    private JavaMailSender mailSender;
+
+    @Override
+    public void sendMsg(String to, String subject, String context) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        mailMessage.setFrom(from);
+        mailMessage.setTo(to);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(context);
+
+        // 真正的发送邮件操作，从 from到 to
+        mailSender.send(mailMessage);
     }
 
 

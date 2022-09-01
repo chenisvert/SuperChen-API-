@@ -123,7 +123,7 @@ public class PubilcApiTwoController extends BaseController {
 
      */
 
-    @AccessLimit(seconds = 1, maxCount = 5) //1秒运行请求5次
+    @AccessLimit(seconds = 3, maxCount = 5) //3秒运行请求5次
     @GetMapping("/getWeather/{day}/{model}/{token}")
     public Result getWeather( @PathVariable Integer day,@PathVariable String model,@PathVariable String token)  {
 

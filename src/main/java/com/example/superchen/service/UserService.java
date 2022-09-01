@@ -16,4 +16,12 @@ public interface UserService extends IService<User> {
     public int countRow();
 
     void updateTime(User user);
+
+    /**
+     * 发送邮箱
+     * @param to
+     * @param subject
+     * @param context
+     */
+    void sendMsg(String to,String subject,String context);
 }

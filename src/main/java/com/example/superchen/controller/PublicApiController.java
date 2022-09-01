@@ -294,7 +294,7 @@ public class PublicApiController extends BaseController {
      * @Since version-11
 
      */
-    @AccessLimit(seconds = 1,maxCount = 9)
+    @AccessLimit(seconds = 1,maxCount = 2)
     @GetMapping("/getText/{token}")
     public Result getText( @PathVariable String token) throws IOException, InterruptedException {
 

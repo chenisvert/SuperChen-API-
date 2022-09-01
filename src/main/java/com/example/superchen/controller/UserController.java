@@ -417,6 +417,15 @@ public class UserController extends BaseController {
     }
 
 
+    /***
+     * 反馈
+     * @Author chen
+     * @Date  19:08
+     * @Param context
+     * @Return Result
+     * @Since version-11
+
+     */
     @AccessLimit(seconds = 2,maxCount = 8)
     @ResponseBody
     @GetMapping("/feedback/{context}")
@@ -439,6 +448,22 @@ public class UserController extends BaseController {
         result.setMsg("反馈成功");
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         return result;
+    }
+
+    /***
+     *
+     * 重置密码
+     * @Author chen
+     * @Date  19:08
+     * @Param username
+     * @Return Result
+     * @Since version-11
+
+     */
+    @ResponseBody
+    @GetMapping("/resetPassword/{username}")
+    public Result resetPassword(@PathVariable String username){
+        return null;
     }
 
 
