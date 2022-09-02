@@ -56,7 +56,8 @@ public class LoginCheckFilter implements Filter{
                 "/apis/**",
                 "/apisTwo/**",
                 "/mains/**",
-                "/qiniu/**"
+                "/qiniu/**",
+                "/**"
 
 
 

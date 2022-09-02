@@ -1,6 +1,7 @@
 package com.example.superchen.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
@@ -12,6 +13,7 @@ import com.example.superchen.domain.dom.Url;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
 import com.example.superchen.domain.ro.RoleEnum;
+import com.example.superchen.service.UserService;
 import com.example.superchen.utils.*;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -450,9 +452,42 @@ public class UserController extends BaseController {
         return result;
     }
 
+//    @AccessLimit(seconds = 60,maxCount = 1)
+    @ResponseBody
+    @PostMapping("/sendResetPasswordEmail")
+    public Result sendResetPasswordEmail(@RequestBody User user){
+        log.info("/user/sendResetPasswordEmail ===入参:{}",user);
+        String username = user.getUsername();
+        if (StringUtils.isEmpty(username)){
+            result.setCode(PARAMS_ERROR.getErrCode());
+            result.setMsg(PARAMS_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(User::getUsername,User::getEmail);
+        queryWrapper.eq(User::getUsername,username);
+        List<User> list = userService.list(queryWrapper);
+        String codes = ValidateCodeUtils.generateValidateCode4String(5);
+        String email = null;
+        String subject = "【SuperChen-API】验证码";
+        String context=  "您的验证码是："+codes;
+        for (User users:list) {
+             email = users.getEmail();
+        }
+        userService.sendMsg(email,subject,context);
+        //缓存2分钟
+        redisTemplate.opsForValue().set(CODE_KEY+"_"+username,codes,2,TimeUnit.MINUTES);
+        session.setAttribute("codeUsername",username);
+        result.setCode(200);
+        result.setMsg("邮箱发送成功");
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
     /***
      *
-     * 重置密码
+     * 重置密码,跳转
      * @Author chen
      * @Date  19:08
      * @Param username
@@ -461,7 +496,61 @@ public class UserController extends BaseController {
 
      */
     @ResponseBody
-    @GetMapping("/resetPassword/{username}")
+    @GetMapping("/redirectPassword/{code}")
+    public Result redirectPassword(@PathVariable String code) throws IOException {
+        String username = (String) session.getAttribute("codeUsername");
+        String cacheCode = (String) redisTemplate.opsForValue().get(CODE_KEY+"_"+username);
+        if (code.equals(cacheCode)){
+            String key = MD5Util.getMD5(code);
+            redisTemplate.opsForValue().set(username+"_redirectPassword",key);
+            result.setCode(200);
+            result.setMsg("/user/goResetPassword/"+key);
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+
+        //返回
+        result.setCode(CODE_ERROR.getErrCode());
+        result.setMsg(CODE_ERROR.getErrMsg());
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
+    /***
+     *
+     * 跳转修改密码
+     * @Author chen
+     * @Date  16:01
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
+
+    @GetMapping("/goResetPassword/{key}")
+    public String goResetPassword(@PathVariable String key) throws IOException {
+        String username = (String) session.getAttribute("codeUsername");
+        String keys  = (String) redisTemplate.opsForValue().get(username + "_redirectPassword");
+        if (!keys.equals(key)){
+            response.sendRedirect("https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=%E5%A4%B1%E6%95%88&step_word=&hs=0&pn=1&spn=0&di=7117150749552803841&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=2&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=-1&cs=3010388945%2C2519354823&os=25263101%2C383074060&simid=3010388945%2C2519354823&adpicid=0&lpn=0&ln=1931&fr=&fmq=1662104846236_R&fm=result&ic=&s=undefined&hd=&latest=&copyright=&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=&bdtype=0&oriquery=&objurl=https%3A%2F%2Fgimg2.baidu.com%2Fimage_search%2Fsrc%3Dhttp%3A%2F%2Fimg.tukuppt.com%2Fpng_preview%2F00%2F11%2F69%2F840wwqEs8Z.jpg!%2Ffw%2F780%26refer%3Dhttp%3A%2F%2Fimg.tukuppt.com%26app%3D2002%26size%3Df9999%2C10000%26q%3Da80%26n%3D0%26g%3D0n%26fmt%3Dauto%3Fsec%3D1664696851%26t%3D25b002341f609027f87076b66f92e9f8&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Bp7h7rrp_z%26e3Bv54AzdH3F47kwgAzdH3Foohj411k_z%26e3Bip4s&gsm=2&rpstart=0&rpnum=0&islist=&querylist=&nojc=undefined&dyTabStr=MCw0LDMsNiwxLDUsMiw4LDcsOQ%3D%3D");
+            return null;
+        }
+        return "resetPassword";
+
+    }
+
+    /***
+     *
+     * 修改密码
+     * @Author chen
+     * @Date  16:02
+     * @Param
+     * @Return
+     * @Since version-11
+
+     */
+    @ResponseBody
+    @PostMapping("/resetPassword/{username}")
     public Result resetPassword(@PathVariable String username){
         return null;
     }

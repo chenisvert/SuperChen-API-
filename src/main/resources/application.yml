@@ -9,22 +9,22 @@ spring:
   datasource:
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://172.23.42.66:3306/network?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://localhost:3306/network?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
-      password: Chen2726225713
+      password: chen
 
 
   # 邮箱配置
   mail:
     host: smtp.qq.com  # 发送邮件的服务器地址
-    username: keaifafafa@qq.com # 登录qq邮箱的账号
-    password: pibszxzqtwyzbfij  # 开启 IMAP/SMTP服务 获得的授权码,而不是qq邮箱的登录密码
+    username: 2726225713@qq.com # 登录qq邮箱的账号
+    password: mqfnzbqsrwtpdehe  # 开启 IMAP/SMTP服务 获得的授权码,而不是qq邮箱的登录密码
     default-encoding: UTF-8
     port: 587
   # redis配置
   redis:
-    host: 172.23.42.66 # 本地IP 或是 虚拟机IP
-    password: Chen2726225713
+    host: localhost # 本地IP 或是 虚拟机IP
+#    password: Chen2726225713
     port: 6379
     cache:
       redis:

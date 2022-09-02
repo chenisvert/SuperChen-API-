@@ -7,4 +7,5 @@ public class RedisKey {
     public static final String TOKEN_KEY = "token";
     public static final String USER_KET = "user";
     public static final String JWTTOKEN_KEY = "jwtToken";
+    public static final String CODE_KEY = "code";
 }
