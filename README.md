@@ -95,8 +95,9 @@ ajax
 2. jar 包
 
 ## jar包部署
-1.maven打包后，上传到服务器
-2.执行 nohup java  -jar jar包名字 &
+1.安装java环境 (推荐jdk11)
+2.maven打包后，上传到服务器
+3.执行 nohup java  -jar jar包名字 &
 
 ## docker 部署
 (后续更新)
