@@ -428,7 +428,6 @@ public class UserController extends BaseController {
      * @Since version-11
 
      */
-    @AccessLimit(seconds = 2,maxCount = 8)
     @ResponseBody
     @GetMapping("/feedback/{context}")
     public Result feedback(@PathVariable String context){
@@ -452,7 +451,7 @@ public class UserController extends BaseController {
         return result;
     }
 
-//    @AccessLimit(seconds = 60,maxCount = 1)
+    @AccessLimit(seconds = 1,maxCount = 2)
     @ResponseBody
     @PostMapping("/sendResetPasswordEmail")
     public Result sendResetPasswordEmail(@RequestBody User user){
