@@ -468,9 +468,15 @@ public class UserController extends BaseController {
         queryWrapper.select(User::getUsername,User::getEmail);
         queryWrapper.eq(User::getUsername,username);
         List<User> list = userService.list(queryWrapper);
+        if (list.isEmpty()){
+            result.setCode(400);
+            result.setMsg("用户未注册");
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
         String codes = ValidateCodeUtils.generateValidateCode4String(5);
         String email = null;
-        String subject = "【SuperChen-API】验证码";
+        String subject = "【SuperChen-API】重置密码-验证码";
         String context=  "您的验证码是："+codes;
         for (User users:list) {
              email = users.getEmail();
@@ -480,7 +486,7 @@ public class UserController extends BaseController {
         redisTemplate.opsForValue().set(CODE_KEY+"_"+username,codes,2,TimeUnit.MINUTES);
         session.setAttribute("codeUsername",username);
         result.setCode(200);
-        result.setMsg("邮箱发送成功");
+        result.setMsg("验证码发送成功");
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         return result;
     }

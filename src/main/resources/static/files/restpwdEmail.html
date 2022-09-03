@@ -102,7 +102,7 @@
                 //登录成功跳转后台
                 if (data.code === 200) {
                     layer.closeAll('loading');
-                    layer.msg("验证码发送成功")
+                    layer.msg(data.msg)
                 } else {
                     layer.msg(data.msg)
                     layer.closeAll('loading');
@@ -133,8 +133,13 @@
                 });
             },
             success: function (data) {
-                layer.closeAll('loading');
-                window.location = data.msg;
+                if (data.code === 200){
+                    layer.closeAll('loading');
+                    window.location = data.msg;
+                }else {
+                    layer.closeAll('loading');
+                    layer.msg(data.msg)
+                }
             },
 
             error: function (e)//服务器响应失败处理函数
