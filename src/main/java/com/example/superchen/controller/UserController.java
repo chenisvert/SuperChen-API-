@@ -19,6 +19,7 @@ import com.github.kevinsawicki.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.RandomUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -531,7 +532,7 @@ public class UserController extends BaseController {
         String username = (String) session.getAttribute("codeUsername");
         String keys  = (String) redisTemplate.opsForValue().get(username + "_redirectPassword");
         if (!keys.equals(key)){
-            response.sendRedirect("https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=%E5%A4%B1%E6%95%88&step_word=&hs=0&pn=1&spn=0&di=7117150749552803841&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=2&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=-1&cs=3010388945%2C2519354823&os=25263101%2C383074060&simid=3010388945%2C2519354823&adpicid=0&lpn=0&ln=1931&fr=&fmq=1662104846236_R&fm=result&ic=&s=undefined&hd=&latest=&copyright=&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=&bdtype=0&oriquery=&objurl=https%3A%2F%2Fgimg2.baidu.com%2Fimage_search%2Fsrc%3Dhttp%3A%2F%2Fimg.tukuppt.com%2Fpng_preview%2F00%2F11%2F69%2F840wwqEs8Z.jpg!%2Ffw%2F780%26refer%3Dhttp%3A%2F%2Fimg.tukuppt.com%26app%3D2002%26size%3Df9999%2C10000%26q%3Da80%26n%3D0%26g%3D0n%26fmt%3Dauto%3Fsec%3D1664696851%26t%3D25b002341f609027f87076b66f92e9f8&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Bp7h7rrp_z%26e3Bv54AzdH3F47kwgAzdH3Foohj411k_z%26e3Bip4s&gsm=2&rpstart=0&rpnum=0&islist=&querylist=&nojc=undefined&dyTabStr=MCw0LDMsNiwxLDUsMiw4LDcsOQ%3D%3D");
+            response.sendRedirect("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.tukuppt.com%2Fpng_preview%2F00%2F11%2F69%2F840wwqEs8Z.jpg%21%2Ffw%2F780&refer=http%3A%2F%2Fimg.tukuppt.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1664789659&t=fa31d76708dca34cde57a5e32a585e8d");
             return null;
         }
         return "resetPassword";
@@ -549,9 +550,34 @@ public class UserController extends BaseController {
 
      */
     @ResponseBody
-    @PostMapping("/resetPassword/{username}")
-    public Result resetPassword(@PathVariable String username){
-        return null;
+    @PostMapping("/resetPassword")
+    public Result resetPassword(@RequestBody User user){
+        String password = user.getPassword();
+        String username = (String) session.getAttribute("codeUsername");
+        log.info("用户："+username+"___修改密码为:"+password);
+        User userUpdate = new User();
+        if (StringUtils.isEmpty(password)){
+            result.setCode(PARAMS_ERROR.getErrCode());
+            result.setMsg(PARAMS_ERROR.getErrMsg());
+            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+            return result;
+        }
+
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername,username);
+        List<User> list = userService.list(queryWrapper);
+        //取出用户id
+        for (User users:list) {
+            userUpdate.setId(users.getId());
+        }
+        String md5 = MD5Util.getMD5(password);
+        userUpdate.setPassword(md5);
+        userService.updateById(userUpdate);
+
+        result.setCode(200);
+        result.setMsg("修改密码成功");
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
     }
 
 
