@@ -89,21 +89,27 @@ ajax
 
 。。。
 
+### 使用api
+1.登录后在用户主页获取token \
+2.用获取到的token覆盖接口地址最后的token 即可
+
+接口返回的JSON 中msg 是返回的主要数据
+
 ### 部署
-目前有两种方法部署：
-1.docker 
+目前有两种方法部署：\
+1.docker \
 2. jar 包
 
 ## jar包部署
-1.安装java环境 (推荐jdk11)
-2.maven打包后，上传到服务器
-3.执行 nohup java  -jar jar包名字 &
+1.安装java环境 (推荐jdk11) \
+2.maven打包后，上传到服务器 \
+3.执行 nohup java  -jar jar包名字 & 
 
 ## docker 部署
 (后续更新)
 
 
 
-
+### 留言
 欢迎大家学习借鉴，觉得好的话，就给我一个star
 谢谢了
