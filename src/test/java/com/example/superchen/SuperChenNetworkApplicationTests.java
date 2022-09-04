@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysql.cj.xdevapi.JsonArray;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -25,25 +27,27 @@ class SuperChenNetworkApplicationTests {
         String address = "";
 
         try {
-            JSONObject resultJson = readJsonFromUrl("http://portalweather.comsys.net.cn/weather03/api/weatherService/getDailyWeather?cityName=杭州市");
-            //resultJson 是返回结果，当前只取位置信息
+//            JSONObject resultJson = readJsonFromUrl("http://portalweather.comsys.net.cn/weather03/api/weatherService/getDailyWeather?cityName=杭州市");
+//            //resultJson 是返回结果，当前只取位置信息
+//
+////            address = ((JSONObject) resultJson.get("data")).getString("location");
+//            JSONArray jsonArray = resultJson.getJSONArray("results");
+//            System.out.println(jsonArray);
+//            JSONArray obs = null;
+//            for (int i = 0; i < jsonArray.size() ; i++) {
+//                JSONObject ob = (JSONObject) jsonArray.get(i);//得到json对象
+//                  obs = ob.getJSONArray("daily");
+//            }
+//
+//                JSONObject ob = (JSONObject) obs.get(0);//得到json对象
+//                String weather = ob.getString("text_night");
+//                String  date = ob.getString("date");
+//                address = "杭州"+"-"+date+":"+weather;
 
-//            address = ((JSONObject) resultJson.get("data")).getString("location");
-            JSONArray jsonArray = resultJson.getJSONArray("results");
-            System.out.println(jsonArray);
-            JSONArray obs = null;
-            for (int i = 0; i < jsonArray.size() ; i++) {
-                JSONObject ob = (JSONObject) jsonArray.get(i);//得到json对象
-                  obs = ob.getJSONArray("daily");
-            }
+            JSONObject resultJson = readJsonFromUrl("https://api.vvhan.com/api/joke?type=json");
+            Object data = resultJson.get("joke").toString();
+            System.out.println(data);
 
-                JSONObject ob = (JSONObject) obs.get(0);//得到json对象
-                String weather = ob.getString("text_night");
-                String  date = ob.getString("date");
-                address = "杭州"+"-"+date+":"+weather;
-
-
-            System.out.println(address);
 //            JSONArray jsonArray1 = JSON.parseArray(obs.get("daily").toString());
 //            for (int i = 0; i < jsonArray1.size() ; i++) {
 //                ob = (JSONObject) jsonArray.get(i);//得到json对象
