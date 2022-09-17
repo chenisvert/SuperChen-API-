@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+请输入要跳转的网站：(必须输入http或https)<input type="url" id="url">
+<input type="button" onclick="saveLink()" value="生成">
+
+<p class="header_p">链接：</p>
+<textarea id="dirUrl" cols="20" rows="2"></textarea>
+<br />
+<input type="button" onclick="jsCopy()" value="复制" class="fz" />
+
+<script src="../js/jquery-3.3.1.js"></script>
+<script src="../layer/layer.js"></script>
+<script src="../js/popMessage.js"></script>
+
+<script>
+
+
+    //复制图片
+    function jsCopy(){
+        var e=document.getElementById("dirUrl");//对象是contents
+        e.select(); //选择对象
+        document.execCommand("Copy"); //执行浏览器复制命令
+        layer.msg("复制成功！")
+    }
+
+
+    function saveLink(){
+        let url  = document.getElementById("url").value
+        $.ajax({
+            url: "/link/saveLink",
+            type: "post",
+            dataType: "json",
+            data:JSON.stringify({"url":url}),
+            contentType: "application/json",
+            success: function (data) {
+                //请求成功
+                if (data.code === 200) {
+                    layer.msg("生成成功！")
+                    document.getElementById("dirUrl").innerHTML = data.msg;
+                }
+                layer.msg(data.msg)
+            }
+        })
+
+    }
+</script>
+</body>
+</html>

@@ -68,8 +68,6 @@
         <input type="button" id="sb" name="sb" onclick="logins()" value="登录" class="btn btn-primary btn-lg" >
         <input type="button"  value="注册" class="btn btn-primary btn-lg" id="zc" onclick="zc()">
         <a href="../restpwdEmail.html">忘记密码？</a>
-        <div id="captcha"></div>
-        <div id="msg"></div>
     </div>
     </div>
 
@@ -92,92 +90,65 @@
                 console.log("验证登录状态：未登录！")
             }
         });
-
-
-        //隐藏验证
-        document.getElementById("captcha").style.display = "none";
-        document.getElementById("msg").style.display = "none"
-
-        if (!window.vTree) {
-            document.write('<script src="./dist/imgSlider.min.js"><\/script>')
-        }
     </script>
     <script>
-        imgSlider.init({
-            el: document.getElementById('captcha'),
-            onSuccess: function() {
-
-                var username = $("#username").val();
-                var password = $("#password").val();
-                //验证成功，发请求
-                $.ajax({
-                    url:"/user/login",
-                    type:"post",
-                    dataType:"json",
-                    contentType: "application/json",
-                    data:JSON.stringify({"username":username,"password":password}),
-                    beforeSend: function (xhr) {
-                        layer.msg("登录中",{icon:16})
-                    },
-                    success: function (data) {
-                        layer.msg(data.msg)
-                        //登录成功跳转后台
-                        if (data.code === 200){
-                            layer.msg("登录成功，请稍等")
-                            window.location.replace("/user/gomain");
-                        }else {
-                            //登录失败
-                            layer.msg(data.msg)
-                            //登录失败重新验证
-                            cleanMsg()
-                        }
-                    },
-
-                    error: function (e)//服务器响应失败处理函数
-                    {
-                        //登录失败重新验证
-                        Message.error("发生错误,错误码:"+e.status);
-                        document.getElementById('msg').innerHTML = ''
-                        console.log(e.message)
-                    }
-
-                })
-            },
-            onFail: cleanMsg,
-            onRefresh: cleanMsg
-        })
-
-        function cleanMsg() {
-            document.getElementById('msg').innerHTML = ''
-        }
-        //点击登录，验证输入
-        function logins(){
-
-            var username = $("#username").val();
-            var password = $("#password").val();
+             function logins() {
 
 
-            if (username === '') {
-                layer.msg("请填写用户名")
-                return false;
-            }else if(password === '') {
-                layer.msg("请填写密码")
-                return false;
-            }
-            //验证输入成功，显示滑动验证
-            document.getElementById("captcha").style.display = "";
-            document.getElementById("msg").style.display = ""
-        }
+                 let username = $("#username").val();
+                 let password = $("#password").val();
 
-        //页面加载完成
-        //去掉动画
-        window.onload = function(){
-            document.getElementById("loading-v3").style.display = "none"
-        }
+                 if (username === '') {
+                     layer.msg("请填写用户名")
+                     return false;
+                 } else if (password === '') {
+                     layer.msg("请填写密码")
+                     return false;
+                 }
+                 //验证成功，发请求
+                 $.ajax({
+                     url: "/user/login",
+                     type: "post",
+                     dataType: "json",
+                     contentType: "application/json",
+                     data: JSON.stringify({"username": username, "password": password}),
+                     beforeSend: function (xhr) {
+                         layer.msg("登录中", {icon: 16})
+                     },
+                     success: function (data) {
+                         layer.msg(data.msg)
+                         //登录成功跳转后台
+                         if (data.code === 200) {
+                             layer.msg("登录成功，请稍等")
+                             window.location.replace("/user/gomain");
+                         } else {
+                             //登录失败
+                             layer.msg(data.msg)
+                             //登录失败重新验证
+                             cleanMsg()
+                         }
+                     },
 
-        function zc(){
-            window.location.href  = "/files/register.html";
-        }
+                     error: function (e)//服务器响应失败处理函数
+                     {
+                         //登录失败重新验证
+                         Message.error("发生错误,错误码:" + e.status);
+                         document.getElementById('msg').innerHTML = ''
+                         console.log(e.message)
+                     }
+
+                 })
+
+
+                 //页面加载完成
+                 //去掉动画
+                 window.onload = function () {
+                     document.getElementById("loading-v3").style.display = "none"
+                 }
+             }
+             function zc() {
+                 window.location.href = "/files/register.html";
+             }
 
 
     </script>

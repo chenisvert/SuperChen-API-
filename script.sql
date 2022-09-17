@@ -91,6 +91,19 @@ create table announcement
     create_time datetime     not null
 );
 
+create table link
+(
+    id          int auto_increment
+        primary key,
+    url         varchar(100)  not null,
+    risk        int default 0 not null,
+    create_time datetime      not null,
+    token       varchar(100)  not null,
+    constraint link_id_uindex
+        unique (id)
+);
+
+
 
 
 

@@ -54,7 +54,10 @@ public class BaseController {
     @Resource
     protected AnnouncementService announcementService;
     @Resource
+    protected LinkService linkService;
+    @Resource
     protected QiniuProvider qiniuProvider;
+
 
 
 
