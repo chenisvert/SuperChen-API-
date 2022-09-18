@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
+
 </head>
 <body>
 请输入要跳转的网站：(必须输入http或https)<input type="url" id="url">
@@ -13,11 +15,52 @@
 <br />
 <input type="button" onclick="jsCopy()" value="复制" class="fz" />
 
+<br><br>
+<div id="app">
+    <button @click="getHistory">查看历史解析</button>
+    <table border="1" cellpadding="0">
+        <tr>
+            <td>目标网址</td>
+            <td>风险</td>
+            <td>时间</td>
+        </tr>
+        <tr v-for="link in msg" >
+            <td>{{link.url}}</td>
+            <td>{{link.risk}}</td>
+            <td>{{link.createTime}}</td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="../js/jquery-3.3.1.js"></script>
 <script src="../layer/layer.js"></script>
 <script src="../js/popMessage.js"></script>
 
 <script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            msg: null
+        },
+        methods:{
+            getHistory: function () {
+                var that = this;
+                axios.get("/link/queryHistoryLink")
+                    .then(function (response) {
+                        that.msg = response.data;
+                    }).catch(function (reason) {
+                    alert("error");
+                });
+            }
+        }
+    });
+
+
 
 
     //复制图片

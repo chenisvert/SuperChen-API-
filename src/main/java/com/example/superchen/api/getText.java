@@ -30,8 +30,9 @@ public class getText {
         String address = "";
         try {
             //{"success":true,"id":2040,"title":"摸底考试","joke":"老师来到教室通知道：“同学们，明天我们要进行摸底考试，大家好好准备一下，这节课上自习。”一学生在下面嘀咕道：“老师，我们心里没‘底’，还是别摸了。”"}
-            JSONObject resultJson = readJsonFromUrl("https://api.wpbom.com/api/index.php?type=json");
-            address = resultJson.get("ishan").toString();
+            JSONObject resultJson = readJsonFromUrl("https://saying.api.azwcl.com/saying/get");
+//            address = resultJson.get("ishan").toString();
+            address = ((JSONObject) resultJson.get("data")).getString("content");
         } catch (Exception e) {
             e.printStackTrace();
         }

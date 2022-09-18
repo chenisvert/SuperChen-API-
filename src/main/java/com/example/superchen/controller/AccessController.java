@@ -183,5 +183,63 @@ public class AccessController  extends BaseController{
 
     }
 
+    @AccessLimit(seconds = 1, maxCount = 7)
+    @ResponseBody
+    @GetMapping("/dirCleanState")
+    public Result dirCleanState() {
+
+        User user = (User) session.getAttribute("login");
+        String token = user.getToken();
+        Access access = new Access();
+
+        LambdaQueryWrapper<Access> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Access::getToken,token);
+        List<Access> list = accessService.list(queryWrapper);
+        Integer cleanday = null;
+        for (Access access1:list) {
+            cleanday = access1.getCleanday();
+        }
+        result.setCode(200);
+        result.setMsg(cleanday);
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
+
+    @AccessLimit(seconds = 1, maxCount = 7)
+    @ResponseBody
+    @GetMapping("/openClean")
+    public Result openClean() {
+
+        User user = (User) session.getAttribute("login");
+        String token = user.getToken();
+        Access access = new Access();
+
+        LambdaQueryWrapper<Access> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Access::getToken,token);
+        List<Access> list = accessService.list(queryWrapper);
+        Integer cleanday = null;
+        Long id = null;
+        for (Access access1:list) {
+            cleanday = access1.getCleanday();
+            id = access1.getId();
+        }
+        //控制开关
+        if (cleanday == 1){
+            cleanday = 0;
+        }else {
+            cleanday = 1;
+        }
+        System.out.println(cleanday);
+        access.setCleanday(cleanday);
+        access.setId(id);
+        accessService.updateById(access);
+
+        result.setCode(200);
+        result.setMsg(cleanday);
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
+
 
 }

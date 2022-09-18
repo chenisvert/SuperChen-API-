@@ -70,6 +70,18 @@ mybatis-plus:
 #    logic-delete-value: 1
 #    logic-not-delete-value: 0
 
+  #定时任务配置
+  task:
+    scheduling:
+      pool:
+        size: 10
+      thread-name-prefix: cleanAccess
+    execution:
+      shutdown:
+        #        线程关闭时是否等所有任务结束
+        await-termination: false
+        #        线程最大的等待时间，防止线程陷入循环关不掉
+        await-termination-period: 10s
 
 
 # 图片存储路径

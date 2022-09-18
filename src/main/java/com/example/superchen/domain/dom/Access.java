@@ -25,4 +25,6 @@ public class Access {
     private Integer threshold;
 
     private String token;
+
+    private Integer cleanday;
 }

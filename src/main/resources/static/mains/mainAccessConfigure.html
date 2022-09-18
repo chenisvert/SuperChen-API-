@@ -17,6 +17,7 @@
 <div class="upDataThreshold" style="margin-left: 40%">
     预警阈值：<input type="text" id="t1" required >
     <input type="button"  onclick="upDataThreshold()" value="修改">
+    每天清空访问量,状态：<span id="dirClean" style="color: red"></span><span> --</span><input type="button"  onclick="openClean()" value="开关清空访问">
 
 
     <div class="hint" style="margin-left: 10%; width: 100px;margin-top: 100px;font-size: 20px" >
@@ -28,6 +29,7 @@
 <script>
     window.onload = function () {
         checkThreshold()
+        dirState()
     }
 
     //获取预警阈值
@@ -73,6 +75,59 @@
             })
 
     }
+
+    //获取
+    function dirState() {
+        $.ajax({
+            url: "/access/dirCleanState",
+            type: "get",
+            dataType: "json",
+            async: false,
+            contentType: "application/json",
+            success: function (data) {
+                //请求成功
+                if (data.code === 200) {
+                    if (data.msg === 1){
+                        document.getElementById("dirClean").innerHTML = "开启"
+                    }else {
+                        document.getElementById("dirClean").innerHTML = "关闭"
+                    }
+
+                } else {
+                    layer.msg(data.msg)
+                }
+
+            }
+        })
+    }
+
+    //获取
+    function openClean() {
+        $.ajax({
+            url: "/access/openClean",
+            type: "get",
+            dataType: "json",
+            async: false,
+            contentType: "application/json",
+            success: function (data) {
+                //请求成功
+                if (data.code === 200) {
+                    if (data.msg === 1) {
+                        layer.msg("每日清空访问已打开！")
+                        dirState()
+                    } else {
+                        layer.msg("每日清空访问已关闭！")
+                        dirState()
+                    }
+
+                } else {
+                    layer.msg(data.msg)
+                }
+
+            }
+        })
+    }
+
 </script>
 </body>
 </html>
