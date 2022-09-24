@@ -7,6 +7,7 @@ create table access
     create_time datetime                  not null,
     threshold   int        default 100000 null,
     token       varchar(500)              not null,
+    cleanday    int        default 0      not null,
     constraint access_id_uindex
         unique (id)
 );

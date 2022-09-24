@@ -11,6 +11,7 @@
       content="支持爱奇艺、优酷、土豆、乐视、搜狐等视频解析."
     />
     <meta name="azure0000" content="VIP影视会员" />
+    <meta name="referrer" content="no-referrer">
     <title>SuperChen & 在线解析</title>
     <!-- Favicon -->  
     <link
@@ -32,6 +33,8 @@
       >
         <div class="container">
             <a class="navbar-brand smooth " style="font-size: large" href="#">接口来之不易，请勿滥用</a>
+          <br>
+          <a href="#" style="color: red">若遇无法播放问题请更换浏览器或更换线路试试</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -169,6 +172,10 @@
                 </div>
               </div>
               <div class="hr mt-4"></div>
+              <div id="player">
+
+              </div>
+<!--              <iframe src="" allowfullscreen="true" id="player" width="100%" height="400px"  type="application/x-shockwave-flash" allowtransparency="true" frameborder="0" scrolling="no"></iframe>-->
               <form>
                     <div class="form-group row">
 <!--                      <span class="col-sm-2 col-form-label text-right">请选择API:</span>-->
@@ -374,8 +381,15 @@ function suburl() {
       }else if (data.code === 201){
           Message.error(data.msg)
       }else if (data.code === 200) {
-          //进入解析
-          window.location.href = data.msg + url;
+          //解析
+        // parent.document.getElementById("player").src =  data.msg + url;
+        var widgetIFrame = $('#widgetIFrame');
+        var widgetIFrameParent = document.getElementById("player")
+        widgetIFrame.remove();
+        widgetIFrameParent.innerHTML = ("<iframe id=\"widgetIFrame\" style=\"width: 100%;height: 600px\" src=\"\"></iframe>");
+        var widgetIFrameNew = $('#widgetIFrame');
+        widgetIFrameNew.attr('src',data.msg+url);
+        widgetIFrameNew.css('width',"100%");
       }
 
       }
@@ -408,6 +422,8 @@ window.onload = function (){
   })
 
 }
+
+
 </script>
 
 <script src="../assets/vendor/jquery/jquery.min.js"></script>
@@ -415,6 +431,7 @@ window.onload = function (){
 <script src="../assets/vendor/bootstrap/bootstrap.min.js"></script>
 <script src="../assets/vendor/headroom/headroom.min.js"></script>
 <script src="../assets/js/argon.min.js"></script>
-
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!--    <script id="lfz" src="https://player.liaofuzhan.com/player/player.js" key=1318190797523910657></script>-->
   </body>
 </html>
