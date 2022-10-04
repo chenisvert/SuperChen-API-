@@ -1,4 +1,4 @@
-# SuperChen_API 平台
+# SuperChen_API 平台(微服务版)
 
 #### 介绍
 SuperChen API 微服务版本(开发中)
