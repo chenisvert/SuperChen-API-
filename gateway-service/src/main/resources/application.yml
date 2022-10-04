@@ -1,0 +1,57 @@
+# 端口
+server:
+  port: 8080
+
+  cloud:
+    nacos:
+      discovery:
+        # 注册中心地址
+        server-addr: localhost:8848
+        # 用户名
+        username: nacos
+        # 密码
+        password: nacos
+
+        # 命名空间：用来区分不同的服务模块
+        namespace: public
+
+spring:
+  # 配置文件名称，用来标识不同环境的配置。由 spring.profiles.active 的值来决定使用哪组配置。
+  ## 简单尝试
+  profiles: route_simple
+  application:
+    # 应用名称
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          # 是否和服务注册与发现组件结合，设置为 true 后可以直接使用应用名称调用服务
+          enabled: true
+      # 路由（routes：路由，它由唯一标识（ID）、目标服务地址（uri）、一组断言（predicates）和一组过滤器组成（filters）。filters 不是必需参数。）
+      routes:
+      # 路由标识（id：标识，具有唯一性）   简单尝试
+      - id: route_simple
+        # 目标服务地址（uri：地址，请求转发后的地址）
+        uri: http://localhost:8002
+        # 路由条件（predicates：断言，匹配 HTTP 请求内容）
+        predicates:
+        ## 转发地址格式为 uri/archive
+        - Path=/archive
+
+
+
+
+
+
+logging:
+  level:
+    # log 级别
+    org.springframework.cloud.gateway: debug
+
+
+
+
+
+
+

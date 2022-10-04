@@ -1,0 +1,43 @@
+# 端口
+server:
+  port: 8001
+
+# 应用名称
+spring:
+  application:
+    name: service-user
+
+
+  cloud:
+    nacos:
+      discovery:
+        # 注册中心地址
+        server-addr: localhost:8848
+         # 用户名
+        username: nacos
+        # 密码
+        password: nacos
+
+        # 命名空间：用来区分不同的服务模块
+        namespace: public
+
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/network?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: chen
+
+  jackson:
+    default-property-inclusion: ALWAYS
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+
+
+#management:
+#  endpoint:
+#    web:
+#      exposure:
+#        enabled:
