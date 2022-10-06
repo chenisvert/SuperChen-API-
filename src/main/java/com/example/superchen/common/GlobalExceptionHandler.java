@@ -25,18 +25,18 @@ public class GlobalExceptionHandler {
 
     private Result result = new Result();
 
-//    /**
-//     * 异常处理方法
-//     * @return
-//     */
-//    @ExceptionHandler(Throwable.class)
-//    public Result exceptionHandler(Throwable ex){
-//        log.error("出现异常！"+ex.getMessage());
-//        result.setCode(SERVER_ERROR.getErrCode());
-//        result.setMsg(SERVER_ERROR.getErrMsg());
-//        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
-//        return result;
-//    }
+    /**
+     * 异常处理方法
+     * @return
+     */
+    @ExceptionHandler(Throwable.class)
+    public Result exceptionHandler(Throwable ex){
+        log.error("出现异常！"+ex.getMessage());
+        result.setCode(SERVER_ERROR.getErrCode());
+        result.setMsg(SERVER_ERROR.getErrMsg());
+        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        return result;
+    }
 
 
     /**

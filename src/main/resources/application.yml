@@ -7,11 +7,11 @@ spring:
 
 
   datasource:
-      type: com.alibaba.druid.pool.DruidDataSource
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/network?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: root
-      password: chen
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.23.42.66:3306/network?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: Chen2726225713
 
 
   # 邮箱配置
@@ -23,8 +23,8 @@ spring:
     port: 587
   # redis配置
   redis:
-    host: localhost # 本地IP 或是 虚拟机IP
-#    password: Chen2726225713
+    host: 172.23.42.66 # 本地IP 或是 虚拟机IP
+    password: Chen2726225713
     port: 6379
     cache:
       redis:
@@ -37,9 +37,9 @@ spring:
       cache: false
     http:
       encoding:
-          force: true
-          charset: UTF-8
-          enabled: true
+        force: true
+        charset: UTF-8
+        enabled: true
 
   # 配置文件上传相关
   servlet:
@@ -63,12 +63,12 @@ mybatis-plus:
     #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#  global-config:
-#    db-config:
-#      id-type: ASSIGN_ID
-#    # 设置逻辑删除（也可不写，如果逻辑和如下一样，可以不写的）
-#    logic-delete-value: 1
-#    logic-not-delete-value: 0
+  #  global-config:
+  #    db-config:
+  #      id-type: ASSIGN_ID
+  #    # 设置逻辑删除（也可不写，如果逻辑和如下一样，可以不写的）
+  #    logic-delete-value: 1
+  #    logic-not-delete-value: 0
 
   #定时任务配置
   task:
