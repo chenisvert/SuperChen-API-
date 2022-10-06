@@ -60,6 +60,7 @@ public class PubilcApiTwoController extends BaseController {
     @ResponseBody
     @GetMapping("/setAccessCount/{token}")
     public Result setAccessCount(@PathVariable String token) {
+
         log.info("入参 ,token：{}", token);
         if (StringUtils.isEmpty(token)){
             result.setCode(PARAMS_ERROR.getErrCode());
@@ -68,6 +69,15 @@ public class PubilcApiTwoController extends BaseController {
             return result;
         }
         Optional.ofNullable(token).orElseThrow(()->new UserException("参数为空！"));
+
+
+        //设置延迟时间
+        long l = System.currentTimeMillis() + Long.valueOf(10);
+        //上锁
+        if(!redisSynUtil.lock("1",String.valueOf(l))){
+            //排队中
+            throw new UserException("人太多了，请稍后再试！");
+        }
 
         Access access = new Access();
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
@@ -105,6 +115,8 @@ public class PubilcApiTwoController extends BaseController {
         int count = access.getCount()+1;
         access.setCount(count);
         accessService.updateById(access);
+        //解锁
+        redisSynUtil.unlock("1",String.valueOf(l));
         //返回
         result.setCode(200);
         result.setMsg(count);

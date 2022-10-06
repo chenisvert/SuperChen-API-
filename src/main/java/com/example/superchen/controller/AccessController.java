@@ -67,7 +67,15 @@ public class AccessController  extends BaseController{
 
     }
 
+    /***
+     * 增加访问
+     * @Author chen
+     * @Date  14:40
+     * @Param
+     * @Return
+     * @Since version-11
 
+     */
     @AccessLimit(seconds = 1, maxCount = 7)
     @ResponseBody
     @PostMapping("/checkAccess")
@@ -90,6 +98,7 @@ public class AccessController  extends BaseController{
         for (Access access1:list) {
             access.setCount(access1.getCount());
         }
+
         result.setCode(200);
         result.setMsg(access.getCount());
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));

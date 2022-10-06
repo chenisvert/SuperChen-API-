@@ -3,6 +3,7 @@ package com.example.superchen.controller;
 
 
 import com.example.superchen.api.Mp4Api;
+import com.example.superchen.common.RedisSynUtil;
 import com.example.superchen.service.*;
 import com.example.superchen.utils.QiniuProvider;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -57,6 +58,8 @@ public class BaseController {
     protected LinkService linkService;
     @Resource
     protected QiniuProvider qiniuProvider;
+    @Resource
+    protected RedisSynUtil redisSynUtil;
 
 
 
