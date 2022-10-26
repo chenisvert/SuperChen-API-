@@ -57,15 +57,7 @@ public class MyAnnotationPermission {
             Object userRole = session.getAttribute("permission");
 
             if (userRole == null) {
-                log.info("用户未登录！");
-                result.setCode(SESSION_ERROR.getErrCode());
-                result.setMsg(SESSION_ERROR.getErrMsg());
-                result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
-                //转json
-                String s = JSON.toJSONString(result);
-                response.setCharacterEncoding("utf-8");
-                response.getWriter().write(s);
-                return null;
+                throw new UserException(SESSION_ERROR.getErrMsg());
             }
 
             log.info("当前权限：{}", userRole.toString());
