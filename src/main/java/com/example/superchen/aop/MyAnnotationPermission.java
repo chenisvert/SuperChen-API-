@@ -57,6 +57,7 @@ public class MyAnnotationPermission {
             Object userRole = session.getAttribute("permission");
 
             if (userRole == null) {
+                log.info("用户未登录");
                 throw new UserException(SESSION_ERROR.getErrMsg());
             }
 
