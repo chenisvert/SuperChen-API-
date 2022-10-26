@@ -12,10 +12,30 @@ create table access
         unique (id)
 );
 
+
+
+create table mp4url
+(
+    id          int auto_increment,
+    url         varchar(256) not null,
+    create_time datetime      not null,
+    create_user varchar(40)   not null comment '创建时间',
+    state       int default 0 not null comment '看过的人数',
+    sisk        int default 0 not null comment '看过的人数',
+    remark      varchar(100)  null comment '备注',
+    constraint mp4url_url_uindex
+        unique (url),
+    constraint url_id_uindex
+        unique (id)
+);
+
+alter table mp4url
+    add primary key (id);
+
+
 create table imagesurl
 (
-    id          int auto_increment
-        primary key,
+    id          int auto_increment,
     url         varchar(700)  not null,
     state       int default 0 not null,
     type        varchar(10)   not null,
@@ -27,6 +47,11 @@ create table imagesurl
     constraint imagesurl_url_uindex
         unique (url)
 );
+
+alter table imagesurl
+    add primary key (id);
+
+
 
 create table ipaddress
 (
@@ -41,21 +66,24 @@ create table ipaddress
         unique (ip)
 );
 
-create table mp4url
+
+create table ipaddress
 (
-    id          int auto_increment
-        primary key,
-    url         varchar(1000) not null,
-    create_time datetime      not null,
-    create_user varchar(40)   not null comment '创建时间',
-    state       int default 0 not null comment '看过的人数',
-    sisk        int default 0 not null comment '看过的人数',
-    remark      varchar(100)  null comment '备注',
-    constraint mp4url_url_uindex
-        unique (url),
-    constraint url_id_uindex
-        unique (id)
+    id          int auto_increment,
+    ip          varchar(40)  not null,
+    address     varchar(100) not null,
+    create_time datetime     not null,
+    constraint ipaddress_id_uindex
+        unique (id),
+    constraint ipaddress_ip_uindex
+        unique (ip)
 );
+
+alter table ipaddress
+    add primary key (id);
+
+
+
 
 create table user
 (
@@ -72,10 +100,12 @@ create table user
 );
 
 
+
+
+
 create table vipvideo
 (
-    id          int auto_increment
-        primary key,
+    id          int auto_increment,
     url         varchar(300) not null,
     create_time datetime     not null,
     create_user varchar(20)  not null,
@@ -85,12 +115,22 @@ create table vipvideo
         unique (url)
 );
 
+alter table vipvideo
+    add primary key (id);
+
+
+
 create table announcement
 (
     context     varchar(500) not null,
     create_user varchar(20)  null,
     create_time datetime     not null
 );
+
+
+
+
+
 
 create table link
 (
