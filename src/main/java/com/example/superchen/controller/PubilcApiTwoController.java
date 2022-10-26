@@ -63,13 +63,8 @@ public class PubilcApiTwoController extends BaseController {
 
         log.info("入参 ,token：{}", token);
         if (StringUtils.isEmpty(token)){
-            result.setCode(PARAMS_ERROR.getErrCode());
-            result.setMsg(PARAMS_ERROR.getErrMsg());
-            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
-            return result;
+            throw  new UserException(PARAMS_ERROR.getErrMsg());
         }
-        Optional.ofNullable(token).orElseThrow(()->new UserException("参数为空！"));
-
 
         //设置延迟时间
         long l = System.currentTimeMillis() + Long.valueOf(10);
@@ -90,10 +85,7 @@ public class PubilcApiTwoController extends BaseController {
 
         //认证token失败
         if (userList.isEmpty()) {
-            result.setCode(TOKEN_ERROR.getErrCode());
-            result.setMsg(TOKEN_ERROR.getErrMsg());
-            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
-            return result;
+            throw  new UserException(TOKEN_ERROR.getErrMsg());
         }
         //未开通服务
         if (listAccess.isEmpty()){
@@ -141,10 +133,7 @@ public class PubilcApiTwoController extends BaseController {
 
         Optional.ofNullable(day).orElseThrow(()->new UserException("日期为空！"));
         if (StringUtils.isEmpty(token) | StringUtils.isEmpty(model) ){
-            result.setCode(PARAMS_ERROR.getErrCode());
-            result.setMsg(PARAMS_ERROR.getErrMsg());
-            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
-            return result;
+            throw  new UserException(PARAMS_ERROR.getErrMsg());
         }
 
         String ipAddr = IPUtil.getIpAddr(request);

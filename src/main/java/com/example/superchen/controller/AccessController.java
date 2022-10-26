@@ -158,6 +158,11 @@ public class AccessController  extends BaseController{
     @PostMapping("/upDataThreshold")
     public Result upDataThreshold(@RequestBody Access accessOn) {
 
+
+        if (accessOn.getCount() == null){
+            throw  new UserException(PARAMS_ERROR.getErrMsg());
+        }
+
         User user = (User) session.getAttribute("login");
         Access access = new Access();
 

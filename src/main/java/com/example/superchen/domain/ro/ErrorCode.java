@@ -13,7 +13,7 @@ package com.example.superchen.domain.ro;
 public enum ErrorCode {
 
 
-    PARAMS_ERROR(201,"参数错误"),
+    PARAMS_ERROR(403,"参数不合法"),
     LOGIN_ERROR(400,"用户名或密码错误"),
     TOKEN_ERROR(403,"token错误"),
     CODE_ERROR(403,"验证码错误"),

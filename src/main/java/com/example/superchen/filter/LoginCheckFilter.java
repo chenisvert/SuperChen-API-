@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 
 
 import com.example.superchen.common.BaseContext;
+import com.example.superchen.common.UserException;
 import com.example.superchen.domain.dom.User;
 import com.example.superchen.domain.ro.Result;
 import com.example.superchen.utils.DateUtils;
@@ -16,6 +17,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static com.example.superchen.domain.ro.ErrorCode.PERMISSION_ERROR;
 
 /**
  * 检查用户是否已经完成登录
@@ -93,17 +96,7 @@ public class LoginCheckFilter implements Filter{
         log.info("用户未登录");
         //5、如果未登录则返回未登录结果，直接返回登录
         response.setCharacterEncoding("GBK");
-        result.setCode(403);
-        result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
-        result.setMsg("请登录！");
-        //转json
-        String s = JSON.toJSONString(result);
-        response.setCharacterEncoding("utf-8");
-        response.getWriter().write(s);
-
-
-        return ;
-
+        throw new UserException("用户未登录");
     }
 
     /**

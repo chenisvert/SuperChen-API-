@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserException.class)
     public Result exceptionHandler(UserException ex){
         log.error(ex.getMessage());
-        result.setCode(SERVER_ERROR.getErrCode());
+        result.setCode(403);
         result.setMsg(ex.getMessage());
         result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         return result;

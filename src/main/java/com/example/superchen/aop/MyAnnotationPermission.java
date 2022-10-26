@@ -75,16 +75,9 @@ public class MyAnnotationPermission {
             }
             //返回
 
-            //返回
-            response.setCharacterEncoding("GBK");
-            result.setCode(PERMISSION_ERROR.getErrCode());
-            result.setMsg(PERMISSION_ERROR.getErrMsg());
-            result.setDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
-            //转json
-            String s = JSON.toJSONString(result);
-            response.setCharacterEncoding("utf-8");
-            response.getWriter().write(s);
-            return null;
+            //提示权限不足
+            throw new UserException(PERMISSION_ERROR.getErrMsg());
+
 
 //        throw new UserException(PERMISSION_ERROR.getErrMsg());
         }
